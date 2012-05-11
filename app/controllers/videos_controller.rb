@@ -12,12 +12,12 @@ class VideosController < ApplicationController
     @videos = @videos.page(params[:page])
     @videos = @videos.per(params[:per_page]) if params[:per_page]
 
-    respond_with :api, @project, @videos
+    respond_with @videos
   end
 
   def show
     @video = @project.videos.find(params[:id])
 
-    respond_with :api, @project, @video
+    respond_with @video
   end
 end

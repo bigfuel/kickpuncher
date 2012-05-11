@@ -15,12 +15,12 @@ class PostsController < ApplicationController
     @posts = @posts.page(params[:page])
     @posts = @posts.per(params[:per_page]) if params[:per_page]
 
-    respond_with :api, @project, @posts
+    respond_with @posts
   end
 
   def show
     @post = @project.posts.find(params[:id])
 
-    respond_with :api, @project, @post
+    respond_with @post
   end
 end

@@ -12,24 +12,24 @@ class SubmissionsController < ApplicationController
     @submissions = @submissions.page(params[:page])
     @submissions = @submissions.per(params[:per_page]) if params[:per_page]
 
-    respond_with :api, @project, @submissions
+    respond_with @submissions
   end
 
   def show
     @submission = @project.submissions.find(params[:id])
 
-    respond_with :api, @project, @submission
+    respond_with @submission
   end
 
   def create
     @submission = @project.submissions.new(params[:submission])
     @submission.save
-    respond_with :api, @project, @submission
+    respond_with @submission
   end
 
   def update
     @submission = @project.submissions.find(params[:id])
     @submission.update_attributes(params[:submission])
-    respond_with :api, @project, @submission
+    respond_with @submission
   end
 end

@@ -11,13 +11,13 @@ class SignupsController < ApplicationController
     @signups = @signups.page(params[:page])
     @signups = @signups.per(params[:per_page]) if params[:per_page]
 
-    respond_with :api, @project, @signups
+    respond_with @signups
   end
 
   def show
     @signup = @project.signups.find(params[:id])
 
-    respond_with :api, @project, @signup
+    respond_with @signup
   end
 
   def create
@@ -30,6 +30,6 @@ class SignupsController < ApplicationController
       @signup.complete if @signup[:opt_out]
     end
 
-    respond_with :api, @project, @signup
+    respond_with @signup
   end
 end

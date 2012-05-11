@@ -12,12 +12,12 @@ class ImagesController < ApplicationController
     @images = @images.page(params[:page])
     @images = @images.per(params[:per_page]) if params[:per_page]
 
-    respond_with :api, @project, @images
+    respond_with @images
   end
 
   def show
     @image = @project.images.find(params[:id])
 
-    respond_with :api, @project, @image
+    respond_with @image
   end
 end

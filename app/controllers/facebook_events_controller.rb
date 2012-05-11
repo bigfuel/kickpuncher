@@ -11,12 +11,12 @@ class FacebookEventsController < ApplicationController
     @facebook_events = @facebook_events.page(params[:page])
     @facebook_events = @facebook_events.per(params[:per_page]) if params[:per_page]
 
-    respond_with :api, @project, @facebook_events
+    respond_with @facebook_events
   end
 
   def show
     @facebook_event = @project.facebook_events.find_by_name(params[:id])
 
-    respond_with :api, @project, @facebook_event
+    respond_with @facebook_event
   end
 end

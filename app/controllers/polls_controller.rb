@@ -12,19 +12,19 @@ class PollsController < ApplicationController
     @polls = @polls.page(params[:page])
     @polls = @polls.per(params[:per_page]) if params[:per_page]
 
-    respond_with :api, @project, @polls
+    respond_with @polls
   end
 
   def vote
     poll = @project.polls.active.find(params[:id])
     poll.vote(params['choice']['id'])
 
-    respond_with :api, @project, @poll
+    respond_with @poll
   end
 
   def show
     @poll = @project.polls.find(params[:id])
 
-    respond_with :api, @project, @poll
+    respond_with @poll
   end
 end

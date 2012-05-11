@@ -11,12 +11,12 @@ class FeedsController < ApplicationController
     @feeds = @feeds.page(params[:page])
     @feeds = @feeds.per(params[:per_page]) if params[:per_page]
 
-    respond_with :api, @project, @feeds
+    respond_with @feeds
   end
 
   def show
     @feed = @project.feeds.find_by_name(params[:id])
 
-    respond_with :api, @project, @feed
+    respond_with @feed
   end
 end

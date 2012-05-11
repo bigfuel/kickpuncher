@@ -11,12 +11,12 @@ class FacebookAlbumsController < ApplicationController
     @facebook_albums = @facebook_albums.page(params[:page])
     @facebook_albums = @facebook_albums.per(params[:per_page]) if params[:per_page]
 
-    respond_with :api, @project, @facebook_albums
+    respond_with @facebook_albums
   end
 
   def show
     @facebook_album = @project.facebook_albums.find_by_name(params[:id])
 
-    respond_with :api, @project, @facebook_album
+    respond_with @facebook_album
   end
 end

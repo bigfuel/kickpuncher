@@ -13,12 +13,12 @@ class EventsController < ApplicationController
     @events = @events.page(params[:page])
     @events = @events.per(params[:per_page]) if params[:per_page]
 
-    respond_with :api, @project, @events
+    respond_with @events
   end
 
   def show
     @event = @project.events.find(params[:id])
 
-    respond_with :api, @project, @event
+    respond_with @event
   end
 end
