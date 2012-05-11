@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::API
   include ActionController::MimeResponds
 
+  respond_to :json, :xml
+
   protected
   def check_for_project
     not_found unless @project

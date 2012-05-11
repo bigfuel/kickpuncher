@@ -1,6 +1,4 @@
 class ProjectsController < ApplicationController
-  respond_to :json, :xml
-
   def index
     @projects = Project.all
     respond_with @projects

@@ -1,8 +1,6 @@
 class FeedsController < ApplicationController
   before_filter :load_project, :check_for_project
 
-  respond_to :json, :xml
-
   def index
     params[:sort_direction] ||= "asc"
 

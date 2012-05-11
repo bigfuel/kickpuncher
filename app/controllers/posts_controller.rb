@@ -1,8 +1,5 @@
 class PostsController < ApplicationController
-  before_filter :load_project
-  append_before_filter :check_for_project
-
-  respond_to :json, :xml
+  before_filter :load_project, :check_for_project
 
   def index
     params[:sort_direction] ||= "asc"
