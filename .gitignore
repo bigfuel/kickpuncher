@@ -13,3 +13,16 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# Others
+.DS_Store
+doc/api
+doc/app
+vendor/bundle
+vendor/cache
+coverage
+config/config.yml
+config/mongoid.yml
+config/newrelic.yml
+.rvmrc
+dump
