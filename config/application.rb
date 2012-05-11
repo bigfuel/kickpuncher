@@ -1,6 +1,13 @@
 require File.expand_path('../boot', __FILE__)
 
-require 'rails/all'
+# require 'rails/all'
+
+# Pick the frameworks you want:
+# require "active_record/railtie"
+require "action_controller/railtie"
+require "action_mailer/railtie"
+# require "active_resource/railtie"
+require "rails/test_unit/railtie"
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
@@ -8,6 +15,9 @@ if defined?(Bundler)
   # If you want your assets lazily compiled in production, use this line
   # Bundler.require(:default, :assets, Rails.env)
 end
+
+# Load config/config.yml into APP_CONFIG
+APP_CONFIG = YAML.load(ERB.new(IO.read(File.expand_path('../config.yml', __FILE__))).result)[Rails.env]
 
 module Kickpuncher
   class Application < Rails::Application
@@ -48,12 +58,23 @@ module Kickpuncher
     # This will create an empty whitelist of attributes available for mass-assignment for all models
     # in your app. As such, your models will need to explicitly whitelist or blacklist accessible
     # parameters by using an attr_accessible or attr_protected declaration.
-    config.active_record.whitelist_attributes = true
+    # config.active_record.whitelist_attributes = true
 
     # Enable the asset pipeline
     config.assets.enabled = true
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    # Custom
+    config.cache_store = :redis_store, ENV['REDISTOGO_URL'] || APP_CONFIG['redis']
+    config.action_controller.asset_host = APP_CONFIG['asset_host'] if APP_CONFIG['asset_host']
+
+    config.generators do |g|
+      g.orm :mongoid
+      g.test_framework :mini_test, spec: true, fixture: false
+      g.integration_tool :mini_test
+      g.fixture_replacement :fabrication, dir: "test/fabricators"
+    end
   end
 end
