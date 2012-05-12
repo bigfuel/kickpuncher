@@ -15,6 +15,7 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 
 require 'capybara/rails'
+require 'capybara/json'
 
 class MiniTest::Spec
   before do
@@ -45,7 +46,6 @@ end
 
 class MiniTest::Rails::Controller
   # Add methods to be used by controller specs here
-  include Devise::TestHelpers
 
   def load_project
     project = Fabricate.build(:project, name: "bf_project_test")
@@ -69,8 +69,11 @@ end
 class MiniTest::Rails::Integration
   # Add methods to be used by integration specs here
   include Capybara::DSL
+  include Capybara::Json
 
-  def sign_in(user)
-    page.driver.post user_session_path, 'user[email]' => user.email, 'user[password]' => user.password
-  end
+  Capybara.current_driver = :rack_test_json
+
+  # def sign_in(user)
+  #   page.driver.post user_session_path, 'user[email]' => user.email, 'user[password]' => user.password
+  # end
 end

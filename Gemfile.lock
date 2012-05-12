@@ -58,6 +58,10 @@ GEM
       rack-test (>= 0.5.4)
       selenium-webdriver (~> 2.0)
       xpath (~> 0.1.4)
+    capybara-json (0.2.0)
+      capybara
+      httpclient
+      multi_json
     capybara_minitest_spec (0.2.1.1)
       capybara
       minitest (~> 2.0)
@@ -118,6 +122,7 @@ GEM
       rest-client (~> 1.6.1)
       rubyzip
     hike (1.2.1)
+    httpclient (2.2.5)
     i18n (0.6.0)
     journey (1.0.3)
     jquery-rails (2.0.2)
@@ -323,6 +328,7 @@ DEPENDENCIES
   awesome_print
   bson_ext
   capybara
+  capybara-json
   capybara_minitest_spec
   carmen
   carrierwave
