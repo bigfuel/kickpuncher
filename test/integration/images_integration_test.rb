@@ -2,7 +2,6 @@ require "minitest_helper"
 
 describe "Admin Images Integration Test" do
   before do
-    sign_in Fabricate(:user)
     @project = Fabricate(:project, name: "bf_project_test")
   end
 
