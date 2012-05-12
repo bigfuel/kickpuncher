@@ -26,3 +26,4 @@ config/mongoid.yml
 config/newrelic.yml
 .rvmrc
 dump
+public/uploads
