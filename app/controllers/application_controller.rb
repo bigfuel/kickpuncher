@@ -4,8 +4,6 @@ class ApplicationController < ActionController::API
   respond_to :json, :xml
 
  protected
-  def self.helper(*); end # fix for devise
-
   def check_for_project
     not_found unless @project
   end
