@@ -5,6 +5,29 @@ class Project
   include Mongoid::Timestamps
   # include Mongoid::CarrierwaveFix
 
+  # Include default devise modules. Others available are:
+  # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :token_authenticatable, :trackable, :lockable
+
+  ## Trackable
+  field :sign_in_count,      type: Integer, default: 0
+  field :current_sign_in_at, type: Time
+  field :last_sign_in_at,    type: Time
+  field :current_sign_in_ip, type: String
+  field :last_sign_in_ip,    type: String
+
+  ## Encryptable
+  # field :password_salt, type: String
+
+  ## Lockable
+  field :failed_attempts, type: Integer, default: 0 # Only if lock strategy is :failed_attempts
+  field :unlock_token,    type: String # Only if unlock strategy is :email or :both
+  field :locked_at,       type: Time
+
+  ## Token authenticatable
+  field :authentication_token, type: String
+
+
   field :state, type: String, default: 'inactive'
   field :name, type: String
   field :description, type: String

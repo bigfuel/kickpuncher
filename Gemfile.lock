@@ -9,6 +9,15 @@ GIT
       minitest (~> 2.10)
       railties (~> 3.1)
 
+GIT
+  remote: git://github.com/spastorino/rails-api.git
+  revision: da5862d9d1be8c34bba9b95e7d45fa797d374273
+  specs:
+    rails-api (0.0.1)
+      actionpack (>= 3.2.0)
+      railties (>= 3.2.0)
+      tzinfo (~> 0.3.31)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -46,6 +55,7 @@ GEM
     ansi (1.4.2)
     arel (3.0.2)
     awesome_print (1.0.2)
+    bcrypt-ruby (3.0.1)
     binding_of_caller (0.6.7)
     bson (1.6.2)
     bson_ext (1.6.2)
@@ -80,6 +90,11 @@ GEM
     connection_pool (0.9.1)
     curb (0.8.0)
     database_cleaner (0.7.2)
+    devise (2.0.4)
+      bcrypt-ruby (~> 3.0)
+      orm_adapter (~> 0.0.3)
+      railties (~> 3.1)
+      warden (~> 1.1.1)
     erubis (2.7.0)
     exceptional (2.0.32)
       rack
@@ -182,6 +197,7 @@ GEM
     net-ssh (2.3.0)
     netrc (0.7.1)
     nokogiri (1.5.2)
+    orm_adapter (0.0.7)
     polyglot (0.3.3)
     profanity_filter (0.1.1)
     progressbar (0.11.0)
@@ -216,10 +232,6 @@ GEM
       activesupport (= 3.2.3)
       bundler (~> 1.0)
       railties (= 3.2.3)
-    rails-api (0.0.1)
-      actionpack (>= 3.2.0)
-      railties (>= 3.2.0)
-      tzinfo (~> 0.3.31)
     rails_best_practices (1.9.1)
       activesupport
       awesome_print
@@ -316,6 +328,8 @@ GEM
     valid_attribute (1.2.0)
     validates_timeliness (3.0.11)
       timeliness (~> 0.3.6)
+    warden (1.1.1)
+      rack (>= 1.0)
     xpath (0.1.4)
       nokogiri (~> 1.3)
     yajl-ruby (1.1.0)
@@ -334,6 +348,7 @@ DEPENDENCIES
   carrierwave
   carrierwave-mongoid
   database_cleaner
+  devise
   exceptional
   fabrication
   feedzirra (= 0.0.24)
@@ -359,7 +374,7 @@ DEPENDENCIES
   pry-stack_explorer
   rabl
   rails (= 3.2.3)
-  rails-api
+  rails-api!
   rails_best_practices
   rb-fsevent
   redis-rails

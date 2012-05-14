@@ -3,9 +3,9 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.3'
 
 # Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+# gem 'rails', git: 'git://github.com/rails/rails.git'
 
-gem 'rails-api'
+gem 'rails-api', git: 'git://github.com/spastorino/rails-api.git'
 
 gem 'jquery-rails'
 
@@ -14,6 +14,7 @@ gem 'bson_ext'
 gem 'acts_as_list_mongoid'
 gem 'mongoid_taggable_with_context'
 
+gem 'devise'
 gem 'state_machine'
 gem 'fog'
 gem 'sinatra'
