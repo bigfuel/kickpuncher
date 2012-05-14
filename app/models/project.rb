@@ -38,7 +38,7 @@ class Project
 
   index :name, unique: true
 
-  attr_accessible :name, :description, :facebook_app_id, :facebook_app_secret, :google_analytics_tracking_code, :production_url
+  attr_accessible :name, :description, :facebook_app_id, :facebook_app_secret, :google_analytics_tracking_code, :production_url, :authentication_token
 
   has_many :events, dependent: :destroy
   has_many :signups, dependent: :destroy
@@ -50,6 +50,8 @@ class Project
   has_many :feeds, dependent: :destroy
   has_many :facebook_albums, dependent: :destroy
   has_many :facebook_events, dependent: :destroy
+
+  before_save :ensure_authentication_token
 
   scope :active, where(state: 'active')
   scope :inactive, where(state: 'inactive')
@@ -79,5 +81,9 @@ class Project
 
   def self.find_by_name(name)
     where(name: name).limit(1).first
+  end
+
+  def self.find_by_name_and_auth_token(name, auth_token)
+    where(name: name, auth_token: auth_token).limit(1).first
   end
 end

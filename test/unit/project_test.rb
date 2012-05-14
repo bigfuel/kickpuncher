@@ -11,13 +11,15 @@ describe Project do
       new_project.must have_valid(:name).when("new_project")
       new_project.wont have_valid(:name).when(@project.name)
       new_project.wont have_valid(:name).when("")
-
-      @project.must have_valid(:repo).when("git@bitbucket.org:bigfuel/bf_project_test.git")
-      @project.wont have_valid(:repo).when("")
     end
 
     it "must be valid" do
       @project.must_be :valid?
+    end
+
+    it "should generate an auth_token" do
+      @project.auth_token.wont_equal ""
+      @project.auth_token.wont_be_nil
     end
 
     it "starts in a inactive state" do
@@ -47,14 +49,8 @@ describe Project do
       Project.find_by_name("bf_project_test").must_equal @project
     end
 
-    it "must have a master branch release" do
-      @project.releases.count.must_equal 1
-      release = @project.releases.first
-      release.branch.must_equal "master"
-    end
-
-    it "must deploy the release" do
-      Sidekiq::Extensions::DeployProject.jobs.size.must_equal 1
+    it "find project by name and auth_token" do
+      Project.find_by_name_and_auth_token("bf_project_test", "Sb1eEk4M7WFo3K6ysycj").must_equal @project
     end
   end
 

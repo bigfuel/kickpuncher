@@ -11,7 +11,7 @@ class ApplicationController < ActionController::API
   end
 
   def load_project
-    @project = Project.active.find_by_name(params[:project_id])
+    @project = Project.active.find_by_name_and_auth_token(params[:project_id], params[:auth_token])
   end
 
   def not_found

@@ -14,7 +14,7 @@ describe "Facebook Albums Integration Test" do
     end
 
     it "retreieve all facebook albums" do
-      get "/facebook_albums?project_id=bf_project_test&format=json"
+      get "/facebook_albums?project_id=bf_project_test&auth_token=Sb1eEk4M7WFo3K6ysycj&format=json"
       body.size.must_equal 3
 
       body[0]['name'].must_equal "bf_facebook_album_test"
@@ -37,7 +37,7 @@ describe "Facebook Albums Integration Test" do
     end
 
     it "retrieve correct facebook album" do
-      get "/facebook_albums/bf_facebook_album_test?project_id=bf_project_test&format=json"
+      get "/facebook_albums/bf_facebook_album_test?project_id=bf_project_test&auth_token=Sb1eEk4M7WFo3K6ysycj&format=json"
 
       body['name'].must_equal "bf_facebook_album_test"
       body['set_id'].must_equal 1357924680324234
@@ -47,7 +47,7 @@ describe "Facebook Albums Integration Test" do
 
   describe "on POST to :create" do
     it "sucessfully creates a new facebook album" do
-      post "/facebook_albums", { project_id: "bf_project_test", facebook_album: { "name" => "bf_facebook_album_test", "set_id" => 46457457324234 }, format: "json" }
+      post "/facebook_albums", { project_id: "bf_project_test", auth_token: "Sb1eEk4M7WFo3K6ysycj", facebook_album: { "name" => "bf_facebook_album_test", "set_id" => 46457457324234 }, format: "json" }
       # get "/facebook_albums/bf_facebook_album_test?project_id=bf_project_test&format=json"
       ap body
 
