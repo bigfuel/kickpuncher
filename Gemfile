@@ -42,9 +42,7 @@ group :test do
   gem 'turn'
   gem 'minitest'
   gem 'ffaker'
-  gem 'capybara'
-  gem 'capybara_minitest_spec'
-  gem 'capybara-json'
+  gem "rack-test", require: "rack/test"
   gem 'database_cleaner'
   gem 'simplecov', require: false
   gem 'guard-minitest'

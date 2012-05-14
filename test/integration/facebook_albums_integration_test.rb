@@ -6,105 +6,102 @@ describe "Facebook Albums Integration Test" do
     @project.activate
   end
 
-  describe "on GET to :index" do
+  describe "GET :index" do
     before do
       @facebook_album = Fabricate(:facebook_album, project: @project, name: "bf_facebook_album_test", set_id: 1357924680)
       @facebook_album = Fabricate(:facebook_album, project: @project, name: "test_album_2", set_id: 111239835, limit: 11)
       @facebook_album = Fabricate(:facebook_album, project: @project, name: "need_better_names_3", set_id: 9999374293, limit: 12)
     end
 
-    it "retreieve all facebook albums" do
-      get "/facebook_albums?project_id=bf_project_test&auth_token=Sb1eEk4M7WFo3K6ysycj&format=json"
-      body.size.must_equal 3
+    it "retrieves all facebook albums" do
+      get "/facebook_albums", { project_id: "bf_project_test", auth_token: "Sb1eEk4M7WFo3K6ysycj", format: "json"}
 
-      body[0]['name'].must_equal "bf_facebook_album_test"
-      body[0]['set_id'].must_equal 1357924680
-      body[0]['limit'].must_equal 10
+      albums = JSON.parse(last_response.body)
+      assert albums.size.must_equal 3
 
-      body[1]['name'].must_equal "test_album_2"
-      body[1]['set_id'].must_equal 111239835
-      body[1]['limit'].must_equal 11
+      assert albums[0]['name'].must_equal "bf_facebook_album_test"
+      assert albums[0]['set_id'].must_equal 1357924680
+      assert albums[0]['limit'].must_equal 10
 
-      body[2]['name'].must_equal "need_better_names_3"
-      body[2]['set_id'].must_equal 9999374293
-      body[2]['limit'].must_equal 12
+      assert albums[1]['name'].must_equal "test_album_2"
+      assert albums[1]['set_id'].must_equal 111239835
+      assert albums[1]['limit'].must_equal 11
+
+      assert albums[2]['name'].must_equal "need_better_names_3"
+      assert albums[2]['set_id'].must_equal 9999374293
+      assert albums[2]['limit'].must_equal 12
+
+      assert last_response.status.must_equal 200
     end
   end
 
-  describe "on GET to :show" do
+  describe "GET :show" do
     before do
       @facebook_album = Fabricate(:facebook_album, project: @project, name: "bf_facebook_album_test", set_id: 1357924680324234)
     end
 
-    it "retrieve correct facebook album" do
-      get "/facebook_albums/bf_facebook_album_test?project_id=bf_project_test&auth_token=Sb1eEk4M7WFo3K6ysycj&format=json"
+    it "retrieve a facebook album" do
+      get "/facebook_albums/bf_facebook_album_test", { project_id: "bf_project_test", auth_token: "Sb1eEk4M7WFo3K6ysycj", format: "json"}
 
-      body['name'].must_equal "bf_facebook_album_test"
-      body['set_id'].must_equal 1357924680324234
-      body['limit'].must_equal 10
+      album = JSON.parse(last_response.body)
+      album['name'].must_equal "bf_facebook_album_test"
+      album['set_id'].must_equal 1357924680324234
+      album['limit'].must_equal 10
+
+      assert last_response.status.must_equal 200
+    end
+
+    it "throws an error if album doesn't exist" do
+      skip
     end
   end
 
-  describe "on POST to :create" do
-    it "sucessfully creates a new facebook album" do
+  describe "POST :create" do
+    before do
       post "/facebook_albums", { project_id: "bf_project_test", auth_token: "Sb1eEk4M7WFo3K6ysycj", facebook_album: { "name" => "bf_facebook_album_test", "set_id" => 46457457324234 }, format: "json" }
-      # get "/facebook_albums/bf_facebook_album_test?project_id=bf_project_test&format=json"
-      ap body
+    end
 
-      body['name'].must_equal "bf_facebook_album_test"
-      body['set_id'].must_equal 46457457324234
-      body['limit'].must_equal 10
+    it "sucessfully creates a new facebook album" do
+      album = JSON.parse(last_response.body)
+      album['name'].must_equal "bf_facebook_album_test"
+      album['set_id'].must_equal 46457457324234
+      album['limit'].must_equal 10
+
+      assert last_response.status.must_equal 201
+    end
+
+    it "throws an error if the album already exist" do
+      post "/facebook_albums", { project_id: "bf_project_test", auth_token: "Sb1eEk4M7WFo3K6ysycj", facebook_album: { "name" => "bf_facebook_album_test", "set_id" => 1357924680324234 }, format: "json" }
+
+      album = JSON.parse(last_response.body)
+      album['errors']['name'][0].must_equal "has already been used in this project."
+
+      assert last_response.status.must_equal 422
     end
   end
 
-  # describe "on PUT to :update" do
+  # describe "PUT :update" do
   #   before do
-  #     @facebook_album = Fabricate(:facebook_album, project: @project, name: "bf_facebook_album_test", set_id: 1357924680)
-  #     visit edit_facebook_album_path(@project, @facebook_album)
+  #     @facebook_album = Fabricate(:facebook_album, project: @project, name: "bf_facebook_album_test", set_id: 1357924680, limit: 25)
   #   end
 
-  #   it "sucessfully update a facebook_album :html" do
-  #     page.fill_in "facebook_album_name", with: "new_name"
-  #     page.fill_in "facebook_album_set_id", with: "987654321"
-  #     page.click_on "Save"
-  #     page.must_have_content "Facebook album was successfully updated."
-  #     page.must_have_content "987654321"
+  #   it "sucessfully updates a facebook album" do
+  #     put "/facebook_albums", { project_id: "bf_project_test", facebook_album: { "name" => "new_facebook_album_test", "set_id" => 939337488 }, format: "json" }
+  #     ap JSON.parse(last_response.body)
   #   end
 
-  #   it "sucessfully update a facebook_album :json" do
-  #     skip
-  #   end
-
-  #   it "fails to update a facebook_album" do
-  #     page.fill_in "facebook_album_name", with: ""
-  #     page.click_on "Save"
-  #     page.must_have_content "prohibited this project from being saved"
-  #   end
-
-  #   it "fails to update a facebook_album :json" do
+  #   it "throws an error if updating a facebook album fails" do
   #     skip
   #   end
   # end
 
-  # describe "on POST to :delete" do
+  # describe "POST :delete" do
   #   before do
   #     @facebook_album = Fabricate(:facebook_album, project: @project, name: "bf_facebook_album_test")
   #   end
 
-  #   it "sucessfully deletes a facebook_album :html" do
-  #     visit facebook_albums_path(@project)
-  #     page.must_have_content "bf_facebook_album_test"
-  #     page.click_on "Delete"
-  #     visit facebook_albums_path(@project)
-  #     page.wont_have_content "bf_facebook_album_test"
-  #   end
-
-  #   it "sucessfully deletes a facebook_album :json" do
-  #     visit facebook_albums_path(@project)
-  #     page.must_have_content "bf_facebook_album_test"
-  #     page.driver.delete facebook_album_path(@project, @facebook_album, format: :json)
-  #     visit facebook_albums_path(@project)
-  #     page.wont_have_content "bf_facebook_album_test"
+  #   it "sucessfully deletes a facebook album" do
+  #     skip
   #   end
   # end
 end

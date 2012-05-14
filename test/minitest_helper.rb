@@ -6,6 +6,7 @@ require "minitest/autorun"
 require "minitest/rails"
 require "mocha"
 require "turn"
+require "rack/test"
 
 # Uncomment if you want awesome colorful output
 # require "minitest/pride"
@@ -13,9 +14,6 @@ Turn.config.format = :outline
 
 ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
-
-require 'capybara/rails'
-require 'capybara/json'
 
 class MiniTest::Spec
   before do
@@ -34,7 +32,6 @@ class MiniTest::Rails::Spec
   # or
   # place within spec class you want to support fixtures for
   # include MiniTest::Rails::Fixtures
-
 
   # Add methods to be used by all specs here
 end
@@ -68,11 +65,8 @@ end
 
 class MiniTest::Rails::Integration
   # Add methods to be used by integration specs here
-  include Capybara::DSL
-  include Capybara::Json
 
-  Capybara.current_driver = :rack_test_json
-
+  include Rack::Test::Methods
   # def sign_in(user)
   #   page.driver.post user_session_path, 'user[email]' => user.email, 'user[password]' => user.password
   # end

@@ -3,7 +3,7 @@ class ApplicationController < ActionController::API
 
   respond_to :json, :xml
 
- protected
+  protected
   def check_for_project
     not_found unless @project
   end
