@@ -1,5 +1,5 @@
 class FacebookAlbumsController < ApplicationController
-  before_filter :load_project, :check_for_project
+  before_filter :load_project, :check_for_project, :verify_auth_token
 
   def index
     params[:sort_direction] ||= "asc"

@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  before_filter :load_project, :check_for_project
+  before_filter :load_project, :check_for_project, :verify_auth_token
 
   def index
     params[:sort_direction] ||= "asc"
@@ -16,6 +16,13 @@ class EventsController < ApplicationController
 
   def show
     @event = @project.events.find(params[:id])
+
+    respond_with @event
+  end
+
+  def create
+    @event = @project.events.new(params[:event])
+    @event.save
 
     respond_with @event
   end

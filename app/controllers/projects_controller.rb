@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.last
+    @project = Project.find(params[:id])
     # @signed_request = decode_signed_request(params[:signed_request], @project.facebook_app_id, @project.facebook_app_secret)
     # @liked = @signed_request['page']['liked'] rescue false
     # @liked = true if Rails.env.development?

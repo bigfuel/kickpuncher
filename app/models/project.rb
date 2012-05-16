@@ -79,6 +79,10 @@ class Project
     self.name
   end
 
+  def verify_auth_token(auth_token)
+    auth_token == self.auth_token
+  end
+
   def self.find_by_name(name)
     where(name: name).limit(1).first
   end
