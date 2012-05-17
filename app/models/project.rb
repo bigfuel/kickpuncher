@@ -80,7 +80,7 @@ class Project
   end
 
   def verify_auth_token(auth_token)
-    auth_token == self.auth_token
+    auth_token == self.authentication_token
   end
 
   def self.find_by_name(name)
