@@ -5,5 +5,5 @@ Fabricator(:project) do
   facebook_app_secret            "00000000000000000000000000000000" # Replace with a real facebook secret
   google_analytics_tracking_code "whyyoutrackin'me"
   production_url                 "https://apps.facebook.com/bf_project_test/"
-  auth_token                     "Sb1eEk4M7WFo3K6ysycj"
+  authentication_token           "Sb1eEk4M7WFo3K6ysycj"
 end
