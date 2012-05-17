@@ -51,8 +51,14 @@ describe "Facebook Albums Integration Test" do
       assert last_response.status.must_equal 200
     end
 
-    it "throws an error if album doesn't exist" do
-      skip
+    it "throws an error if album is not found" do
+      get "/facebook_albums/doesnt_exist", { project_id: "bf_project_test", auth_token: "Sb1eEk4M7WFo3K6ysycj", format: "json"}
+
+      response = JSON.parse(last_response.body)
+      response['error']['status'].must_equal "404"
+      response['error']['message'].must_equal "Sorry, couldn't find resource"
+
+      assert last_response.status.must_equal 404
     end
   end
 
@@ -80,28 +86,35 @@ describe "Facebook Albums Integration Test" do
     end
   end
 
-  # describe "PUT :update" do
-  #   before do
-  #     @facebook_album = Fabricate(:facebook_album, project: @project, name: "bf_facebook_album_test", set_id: 1357924680, limit: 25)
-  #   end
+  describe "PUT :update" do
+    before do
+      @facebook_album = Fabricate(:facebook_album, project: @project, name: "bf_facebook_album_test", set_id: 1357924680, limit: 25)
+    end
 
-  #   it "sucessfully updates a facebook album" do
-  #     put "/facebook_albums", { project_id: "bf_project_test", facebook_album: { "name" => "new_facebook_album_test", "set_id" => 939337488 }, format: "json" }
-  #     ap JSON.parse(last_response.body)
-  #   end
+    it "sucessfully updates a facebook album" do
+      put "/facebook_albums/bf_facebook_album_test", { project_id: "bf_project_test", auth_token: "Sb1eEk4M7WFo3K6ysycj", facebook_album: { "name" => "new_facebook_album_test", "set_id" => 939337488 }, format: "json" }
 
-  #   it "throws an error if updating a facebook album fails" do
-  #     skip
-  #   end
-  # end
+      album = JSON.parse(last_response.body)
+      album['name'].must_equal "new_facebook_album_test"
+      album['set_id'].must_equal 939337488
 
-  # describe "POST :delete" do
-  #   before do
-  #     @facebook_album = Fabricate(:facebook_album, project: @project, name: "bf_facebook_album_test")
-  #   end
+      assert last_response.status.must_equal 200
+    end
+  end
 
-  #   it "sucessfully deletes a facebook album" do
-  #     skip
-  #   end
-  # end
+  describe "DELETE :destroy" do
+    before do
+      @facebook_album = Fabricate(:facebook_album, project: @project, name: "some_new_album")
+    end
+
+    it "sucessfully deletes a facebook album" do
+      delete "/facebook_albums/some_new_album", { project_id: "bf_project_test", auth_token: "Sb1eEk4M7WFo3K6ysycj", format: "json" }
+
+      response = JSON.parse(last_response.body)
+      response['delete']['status'].must_equal "200"
+      response['delete']['message'].must_equal "the resource has been deleted"
+
+      assert last_response.status.must_equal 200
+    end
+  end
 end

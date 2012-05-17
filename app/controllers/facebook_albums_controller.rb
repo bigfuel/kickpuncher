@@ -15,7 +15,7 @@ class FacebookAlbumsController < ApplicationController
   def show
     @facebook_album = @project.facebook_albums.find_by_name(params[:id])
 
-    respond_with @facebook_album
+    respond_with @facebook_album, responder: Responders
   end
 
   def create
@@ -26,9 +26,16 @@ class FacebookAlbumsController < ApplicationController
   end
 
   def update
-    @facebook_album = @project.facebook_albums.find(params[:id])
+    @facebook_album = @project.facebook_albums.find_by_name(params[:id])
     @facebook_album.update_attributes(params[:facebook_album])
 
-    respond_with @facebook_album
+    respond_with @facebook_album, responder: Responders
+  end
+
+  def destroy
+    @facebook_album = @project.facebook_albums.find_by_name(params[:id])
+    @facebook_album.destroy
+
+    respond_with @facebook_album, responder: Responders
   end
 end
