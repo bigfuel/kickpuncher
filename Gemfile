@@ -34,6 +34,7 @@ gem 'carmen'
 gem 'pry-rails'
 gem 'rabl'
 gem 'yajl-ruby'
+gem 'retriable'
 
 # Use unicorn as the web server
 gem 'unicorn'
