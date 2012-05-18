@@ -64,7 +64,7 @@ describe "Facebook Albums Integration Test" do
 
   describe "POST :create" do
     before do
-      post "/facebook_albums", { project_id: "bf_project_test", auth_token: "Sb1eEk4M7WFo3K6ysycj", facebook_album: { "name" => "bf_facebook_album_test", "set_id" => 46457457324234 }, format: "json" }
+      post "/facebook_albums", { project_id: "bf_project_test", auth_token: "Sb1eEk4M7WFo3K6ysycj", facebook_album: { name: "bf_facebook_album_test", set_id: 46457457324234 }, format: "json" }
     end
 
     it "sucessfully creates a new facebook album" do
@@ -77,7 +77,7 @@ describe "Facebook Albums Integration Test" do
     end
 
     it "throws an error if the album already exist" do
-      post "/facebook_albums", { project_id: "bf_project_test", auth_token: "Sb1eEk4M7WFo3K6ysycj", facebook_album: { "name" => "bf_facebook_album_test", "set_id" => 1357924680324234 }, format: "json" }
+      post "/facebook_albums", { project_id: "bf_project_test", auth_token: "Sb1eEk4M7WFo3K6ysycj", facebook_album: { name: "bf_facebook_album_test" }, format: "json" }
 
       album = JSON.parse(last_response.body)
       album['errors']['name'][0].must_equal "has already been used in this project."
@@ -92,11 +92,12 @@ describe "Facebook Albums Integration Test" do
     end
 
     it "sucessfully updates a facebook album" do
-      put "/facebook_albums/bf_facebook_album_test", { project_id: "bf_project_test", auth_token: "Sb1eEk4M7WFo3K6ysycj", facebook_album: { "name" => "new_facebook_album_test", "set_id" => 939337488 }, format: "json" }
+      put "/facebook_albums/bf_facebook_album_test", { project_id: "bf_project_test", auth_token: "Sb1eEk4M7WFo3K6ysycj", facebook_album: { name: "new_facebook_album_test", set_id: 939337488, limit: 15 }, format: "json" }
 
       album = JSON.parse(last_response.body)
       album['name'].must_equal "new_facebook_album_test"
       album['set_id'].must_equal 939337488
+      album['limit'].must_equal 15
 
       assert last_response.status.must_equal 200
     end

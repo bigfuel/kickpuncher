@@ -9,7 +9,7 @@ class FacebookAlbumsController < ApplicationController
     @facebook_albums = @facebook_albums.page(params[:page])
     @facebook_albums = @facebook_albums.per(params[:per_page]) if params[:per_page]
 
-    # respond_with @facebook_albums
+    respond_with @facebook_albums
   end
 
   def show
