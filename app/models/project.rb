@@ -88,6 +88,6 @@ class Project
   end
 
   def self.find_by_name_and_auth_token(name, auth_token)
-    where(name: name, auth_token: auth_token).limit(1).first
+    where(name: name, authentication_token: auth_token).limit(1).first
   end
 end
