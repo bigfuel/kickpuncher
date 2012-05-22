@@ -1,4 +1,4 @@
-require 'minitest_helper'
+require 'test_helper'
 
 describe VideosController do
   before do
@@ -16,7 +16,7 @@ describe VideosController do
     end
 
     it "return a list of approved videos" do
-      get :index, format: :json, project_id: @project
+      get_with_project @project, :index, format: :json
       must_respond_with :success
       must_render_template "api/videos/index"
       videos = assigns(:videos)
@@ -31,7 +31,7 @@ describe VideosController do
     end
 
     it "return a video" do
-      get :show, format: :json, project_id: @project, id: @video.id
+      get_with_project @project, :show, format: :json, id: @video.id
       must_respond_with :success
       must_render_template "api/videos/show"
       video = assigns(:video)
@@ -43,13 +43,13 @@ describe VideosController do
     it "with a valid video returns a json object" do
       video = Fabricate.attributes_for(:video, youtube_id: "123456", project: nil)
       video['screencap'] = Rack::Test::UploadedFile.new(Rails.root.join('test', 'support', 'Desktop.jpg').to_s, 'image/jpeg', true)
-      post :create, format: :json, project_id: @project, video: video
+      post_with_project @project, :create, format: :json, video: video
       must_respond_with :success
       json_response['youtube_id'].must_equal "123456"
     end
 
     it "with an invalid video returns unprocessable_entity and a json object with validation errors" do
-      post :create, format: :json, project_id: @project, video: Video.new
+      post_with_project @project, :create, format: :json, video: Video.new
       must_respond_with :unprocessable_entity
       json_response["errors"]["youtube_id"].must_include "can't be blank"
     end

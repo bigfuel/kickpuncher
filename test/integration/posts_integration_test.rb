@@ -1,6 +1,6 @@
-require "minitest_helper"
+require "test_helper"
 
-describe "Admin Posts Integration Test" do
+describe "Posts Integration Test" do
   before do
     @project = Fabricate(:project, name: "bf_project_test")
   end
@@ -11,13 +11,13 @@ describe "Admin Posts Integration Test" do
     end
 
     it "shows correct url and post name :html" do
-      visit admin_project_posts_path(@project)
+      visit posts_path(@project)
       page.current_url.must_include('/bf_project_test/posts')
       page.must_have_content "bf_post_test"
     end
 
     it "shows correct url and post name :json" do
-      visit admin_project_posts_path(@project, format: :json)
+      visit posts_path(@project, format: :json)
       page.current_url.must_include('/bf_project_test/posts.json')
       page.must_have_content "bf_post_test"
     end
@@ -25,7 +25,7 @@ describe "Admin Posts Integration Test" do
 
   describe "on GET to :new" do
     before do
-      visit new_admin_project_post_path(@project)
+      visit new_post_path(@project)
     end
 
     it "shows the correct url" do
@@ -60,7 +60,7 @@ describe "Admin Posts Integration Test" do
   describe "on GET to :edit" do
     before do
       @post = Fabricate(:post, project: @project, title: "bf_post_test", content: "lorem ipsum post test", url: "http://post.test.com", tags: "post, test, tags, lorem, ipsum")
-      visit edit_admin_project_post_path(@project, @post)
+      visit edit_post_path(@project, @post)
     end
 
     it "shows the correct url" do
@@ -98,7 +98,7 @@ describe "Admin Posts Integration Test" do
     end
 
     it "shows correct url and project post info :html" do
-      visit admin_project_post_path(@project, @post)
+      visit post_path(@project, @post)
       path_id = @post.id.to_s
       page.current_url.must_include('/posts/' + path_id)
       page.must_have_content 'bf_post_test'
@@ -109,7 +109,7 @@ describe "Admin Posts Integration Test" do
     end
 
     it "shows correct url and project post info :json" do
-      visit admin_project_post_path(@project, @post, format: :json)
+      visit post_path(@project, @post, format: :json)
       path_id = @post.id.to_s
       page.current_url.must_include('/posts/' + path_id + '.json')
       page.must_have_content '"title":"bf_post_test"'
@@ -122,7 +122,7 @@ describe "Admin Posts Integration Test" do
 
   describe "on POST to :create" do
     it "sucessfully create a new post :html" do
-      visit new_admin_project_post_path(@project)
+      visit new_post_path(@project)
       page.fill_in "post_title", with: "bf_post_test"
       page.fill_in "post_content", with: "lorem ipsum post test"
       page.fill_in "post_url", with: "http://post.test.com"
@@ -142,7 +142,7 @@ describe "Admin Posts Integration Test" do
     end
 
     it "fails to create a new post" do
-      visit new_admin_project_post_path(@project)
+      visit new_post_path(@project)
       page.fill_in "post_title", with: "bf_post_test"
       page.click_on "Save"
       page.must_have_content "prohibited this project from being saved"
@@ -156,7 +156,7 @@ describe "Admin Posts Integration Test" do
   describe "on PUT to :update" do
     before do
       @post = Fabricate(:post, project: @project, title: "bf_post_test", content: "lorem ipsum post test", url: "http://post.test.com", tags: "post, test, tags, lorem, ipsum")
-      visit edit_admin_project_post_path(@project, @post)
+      visit edit_post_path(@project, @post)
     end
 
     it "sucessfully update a post :html" do
@@ -197,18 +197,18 @@ describe "Admin Posts Integration Test" do
     end
 
     it "sucessfully deletes a post :html" do
-      visit admin_project_posts_path(@project)
+      visit posts_path(@project)
       page.must_have_content "bf_post_test"
       page.click_on "Delete"
-      visit admin_project_posts_path(@project)
+      visit posts_path(@project)
       page.wont_have_content "bf_post_test"
     end
 
     it "sucessfully deletes a post :json" do
-      visit admin_project_posts_path(@project)
+      visit posts_path(@project)
       page.must_have_content "bf_post_test"
-      page.driver.delete admin_project_post_path(@project, @post, format: :json)
-      visit admin_project_posts_path(@project)
+      page.driver.delete post_path(@project, @post, format: :json)
+      visit posts_path(@project)
       page.wont_have_content "bf_post_test"
     end
   end
@@ -219,15 +219,15 @@ describe "Admin Posts Integration Test" do
     end
 
     it "sucessfully approves a project :html" do
-      visit admin_project_post_path(@project, @post)
+      visit post_path(@project, @post)
       page.must_have_content "pending"
-      page.driver.get approve_admin_project_post_path(@project, @post)
-      visit admin_project_post_path(@project, @post)
+      page.driver.get approve_post_path(@project, @post)
+      visit post_path(@project, @post)
       page.must_have_content "approved"
     end
 
     it "sucessfully approves a project :json" do
-      visit approve_admin_project_post_path(@project, @post, format: :json)
+      visit approve_post_path(@project, @post, format: :json)
       page.current_url.must_include('/approve.json')
       page.must_have_content '"status":"success"'
     end
@@ -239,15 +239,15 @@ describe "Admin Posts Integration Test" do
     end
 
     it "successfully denies a project :html" do
-      visit admin_project_post_path(@project, @post)
+      visit post_path(@project, @post)
       page.must_have_content "pending"
-      page.driver.get deny_admin_project_post_path(@project, @post)
-      visit admin_project_post_path(@project, @post)
+      page.driver.get deny_post_path(@project, @post)
+      visit post_path(@project, @post)
       page.must_have_content "denied"
     end
 
     it "successfully denies a project :json" do
-      visit deny_admin_project_post_path(@project, @post, format: :json)
+      visit deny_post_path(@project, @post, format: :json)
       page.current_url.must_include('/deny.json')
       page.must_have_content '"status":"success"'
     end

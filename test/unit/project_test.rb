@@ -1,4 +1,4 @@
-require "minitest_helper"
+require 'test_helper'
 
 describe Project do
   describe "A project" do
@@ -17,9 +17,9 @@ describe Project do
       @project.must_be :valid?
     end
 
-    it "should generate an auth_token" do
-      @project.auth_token.wont_equal ""
-      @project.auth_token.wont_be_nil
+    it "should generate an authentication_token" do
+      @project.authentication_token.wont_equal ""
+      @project.authentication_token.wont_be_nil
     end
 
     it "starts in a inactive state" do

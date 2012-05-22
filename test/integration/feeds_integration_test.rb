@@ -1,6 +1,6 @@
-require "minitest_helper"
+require 'test_helper'
 
-describe "Admin Feeds Integration Test" do
+describe "Feeds Integration Test" do
   before do
     @project = Fabricate(:project, name: "bf_project_test")
   end
@@ -11,13 +11,13 @@ describe "Admin Feeds Integration Test" do
     end
 
     it "shows correct url and feed name :html" do
-      visit admin_project_feeds_path(@project)
+      visit feeds_path(@project)
       page.current_url.must_include('/bf_project_test/feeds')
       page.must_have_content "bf_feed_test"
     end
 
     it "shows correct url and feed name :json" do
-      visit admin_project_feeds_path(@project, format: :json)
+      visit feeds_path(@project, format: :json)
       page.current_url.must_include('/bf_project_test/feeds.json')
       page.must_have_content "bf_feed_test"
     end
@@ -25,7 +25,7 @@ describe "Admin Feeds Integration Test" do
 
   describe "on GET to :new" do
     before do
-      visit new_admin_project_feed_path(@project)
+      visit new_feed_path(@project)
     end
 
     it "shows the correct url" do
@@ -52,7 +52,7 @@ describe "Admin Feeds Integration Test" do
   describe "on GET to :edit" do
     before do
       @feed = Fabricate(:feed, project: @project, name: "bf_feed_test", url: "http://feed.test.com", limit: 17)
-      visit edit_admin_project_feed_path(@project, @feed)
+      visit edit_feed_path(@project, @feed)
     end
 
     it "shows the correct url" do
@@ -82,7 +82,7 @@ describe "Admin Feeds Integration Test" do
     end
 
     it "shows correct feed info :html" do
-      visit admin_project_feed_path(@project, @feed)
+      visit feed_path(@project, @feed)
       path_id = @feed.id.to_s
       page.current_url.must_include('/feeds/' + path_id)
       page.must_have_content 'bf_feed_test'
@@ -91,7 +91,7 @@ describe "Admin Feeds Integration Test" do
     end
 
     it "shows correct feed info :json" do
-      visit admin_project_feed_path(@project, @feed, format: :json)
+      visit feed_path(@project, @feed, format: :json)
       path_id = @feed.id.to_s
       page.current_url.must_include('/feeds/' + path_id + '.json')
       page.must_have_content '"name":"bf_feed_test"'
@@ -102,7 +102,7 @@ describe "Admin Feeds Integration Test" do
 
   describe "on POST to :create" do
     it "sucessfully create a new feed :html" do
-      visit new_admin_project_feed_path(@project)
+      visit new_feed_path(@project)
       page.fill_in "feed_name", with: "bf_feed_test"
       page.fill_in "feed_url", with: "http://feed.test.com"
       page.fill_in "feed_limit", with: "17"
@@ -118,7 +118,7 @@ describe "Admin Feeds Integration Test" do
     end
 
     it "fails to create a new feed" do
-      visit new_admin_project_feed_path(@project)
+      visit new_feed_path(@project)
       page.click_on "Save"
       page.must_have_content "prohibited this project from being saved"
     end
@@ -131,7 +131,7 @@ describe "Admin Feeds Integration Test" do
   describe "on PUT to :update" do
     before do
       @feed = Fabricate(:feed, project: @project, name: "bf_feed_test", url: "http://feed.test.com")
-      visit edit_admin_project_feed_path(@project, @feed)
+      visit edit_feed_path(@project, @feed)
     end
 
     it "sucessfully update a feed :html" do
@@ -166,18 +166,18 @@ describe "Admin Feeds Integration Test" do
     end
 
     it "sucessfully deletes a feed :html" do
-      visit admin_project_feeds_path(@project)
+      visit feeds_path(@project)
       page.must_have_content "bf_feed_test"
       page.click_on "Delete"
-      visit admin_project_feeds_path(@project)
+      visit feeds_path(@project)
       page.wont_have_content "bf_feed_test"
     end
 
     it "sucessfully deletes a feed :json" do
-      visit admin_project_feeds_path(@project)
+      visit feeds_path(@project)
       page.must_have_content "bf_feed_test"
-      page.driver.delete admin_project_feed_path(@project, @feed, format: :json)
-      visit admin_project_feeds_path(@project)
+      page.driver.delete feed_path(@project, @feed, format: :json)
+      visit feeds_path(@project)
       page.wont_have_content "bf_feed_test"
     end
   end

@@ -1,6 +1,6 @@
-require "minitest_helper"
+require "test_helper"
 
-describe "Admin Submissions Integration Test" do
+describe "Submissions Integration Test" do
   before do
     @project = Fabricate(:project, name: "bf_project_test")
   end
@@ -11,13 +11,13 @@ describe "Admin Submissions Integration Test" do
     end
 
     it "shows correct url and submission name :html" do
-      visit admin_project_submissions_path(@project)
+      visit submissions_path(@project)
       page.current_url.must_include('/bf_project_test/submissions')
       page.must_have_content "bf_submission_test"
     end
 
     it "shows correct url and submission name :json" do
-      visit admin_project_submissions_path(@project, format: :json)
+      visit submissions_path(@project, format: :json)
       page.current_url.must_include('/bf_project_test/submissions.json')
       page.must_have_content "bf_submission_test"
     end
@@ -25,7 +25,7 @@ describe "Admin Submissions Integration Test" do
 
   describe "on GET to :new" do
     before do
-      visit new_admin_project_submission_path(@project)
+      visit new_submission_path(@project)
     end
 
     it "shows the correct url" do
@@ -60,7 +60,7 @@ describe "Admin Submissions Integration Test" do
   describe "on GET to :edit" do
     before do
       @submission = Fabricate(:submission, project: @project, facebook_name: "bf_submission_test", facebook_id: "123456789", facebook_email: "submission@test.com")
-      visit edit_admin_project_submission_path(@project, @submission)
+      visit edit_submission_path(@project, @submission)
     end
 
     it "shows the correct url" do
@@ -94,7 +94,7 @@ describe "Admin Submissions Integration Test" do
     end
 
     it "shows correct url and project submission info :html" do
-      visit admin_project_submission_path(@project, @submission)
+      visit submission_path(@project, @submission)
       path_id = @submission.id.to_s
       page.current_url.must_include('/submissions/' + path_id)
       page.must_have_content 'bf_submission_test'
@@ -104,7 +104,7 @@ describe "Admin Submissions Integration Test" do
     end
 
     it "shows correct url and project submission info :json" do
-      visit admin_project_submission_path(@project, @submission, format: :json)
+      visit submission_path(@project, @submission, format: :json)
       path_id = @submission.id.to_s
       page.current_url.must_include('/submissions/' + path_id + '.json')
       page.must_have_content '"facebook_name":"bf_submission_test"'
@@ -116,7 +116,7 @@ describe "Admin Submissions Integration Test" do
 
   describe "on POST to :create" do
     it "sucessfully create a new submission :html" do
-      visit new_admin_project_submission_path(@project)
+      visit new_submission_path(@project)
       page.fill_in "submission_facebook_name", with: "bf_submission_test"
       page.fill_in "submission_facebook_email", with: "123456789"
       page.fill_in "submission_facebook_id", with: "submission@test.com"
@@ -134,7 +134,7 @@ describe "Admin Submissions Integration Test" do
     end
 
     it "fails to create a new submission" do
-      visit new_admin_project_submission_path(@project)
+      visit new_submission_path(@project)
       page.fill_in "submission_facebook_name", with: "bf_submission_test"
       page.click_on "Save"
       page.must_have_content "prohibited this project from being saved"
@@ -148,7 +148,7 @@ describe "Admin Submissions Integration Test" do
   describe "on PUT to :update" do
     before do
       @submission = Fabricate(:submission, project: @project, facebook_name: "bf_submission_test", facebook_id: "123456789", facebook_email: "submission@test.com")
-      visit edit_admin_project_submission_path(@project, @submission)
+      visit edit_submission_path(@project, @submission)
     end
 
     it "sucessfully update a submission :html" do
@@ -187,18 +187,18 @@ describe "Admin Submissions Integration Test" do
     end
 
     it "sucessfully deletes a submission :html" do
-      visit admin_project_submissions_path(@project)
+      visit submissions_path(@project)
       page.must_have_content "bf_submission_test"
       page.click_on "Delete"
-      visit admin_project_submissions_path(@project)
+      visit submissions_path(@project)
       page.wont_have_content "bf_submission_test"
     end
 
     it "sucessfully deletes a submission :json" do
-      visit admin_project_submissions_path(@project)
+      visit submissions_path(@project)
       page.must_have_content "bf_submission_test"
-      page.driver.delete admin_project_submission_path(@project, @submission, format: :json)
-      visit admin_project_submissions_path(@project)
+      page.driver.delete submission_path(@project, @submission, format: :json)
+      visit submissions_path(@project)
       page.wont_have_content "bf_submission_test"
     end
   end
@@ -209,15 +209,15 @@ describe "Admin Submissions Integration Test" do
     end
 
     it "sucessfully approves a project :html" do
-      visit admin_project_submission_path(@project, @submission)
+      visit submission_path(@project, @submission)
       page.must_have_content "pending"
-      page.driver.get approve_admin_project_submission_path(@project, @submission)
-      visit admin_project_submission_path(@project, @submission)
+      page.driver.get approve_submission_path(@project, @submission)
+      visit submission_path(@project, @submission)
       page.must_have_content "approved"
     end
 
     it "sucessfully approves a project :json" do
-      visit approve_admin_project_submission_path(@project, @submission, format: :json)
+      visit approve_submission_path(@project, @submission, format: :json)
       page.current_url.must_include('/approve.json')
       page.must_have_content '"status":"success"'
     end
@@ -229,15 +229,15 @@ describe "Admin Submissions Integration Test" do
     end
 
     it "successfully denies a project :html" do
-      visit admin_project_submission_path(@project, @submission)
+      visit submission_path(@project, @submission)
       page.must_have_content "pending"
-      page.driver.get deny_admin_project_submission_path(@project, @submission)
-      visit admin_project_submission_path(@project, @submission)
+      page.driver.get deny_submission_path(@project, @submission)
+      visit submission_path(@project, @submission)
       page.must_have_content "denied"
     end
 
     it "successfully denies a project :json" do
-      visit deny_admin_project_submission_path(@project, @submission, format: :json)
+      visit deny_submission_path(@project, @submission, format: :json)
       page.current_url.must_include('/deny.json')
       page.must_have_content '"status":"success"'
     end

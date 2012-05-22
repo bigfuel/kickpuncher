@@ -47,7 +47,7 @@ group :test do
   gem 'database_cleaner'
   gem 'simplecov', require: false
   gem 'guard-minitest'
-  gem 'minitest-rails', git: 'git://github.com/rawongithub/minitest-rails.git', branch: 'gemspec' #rawongithub
+  gem 'minitest-spec-rails'
   gem 'minitest-matchers'
   gem 'valid_attribute'
   gem 'mocha', require: false

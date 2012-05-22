@@ -1,4 +1,4 @@
-require "minitest_helper"
+require 'test_helper'
 
 describe "Projects Integration Test" do
   before do
@@ -6,7 +6,7 @@ describe "Projects Integration Test" do
   end
 
   it "shows project's name" do
-    visit admin_project_path(@project)
+    get project_path(@project)
     page.text.must_include "bf_project_test"
   end
 end

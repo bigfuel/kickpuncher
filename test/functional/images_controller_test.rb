@@ -1,4 +1,4 @@
-require 'minitest_helper'
+require 'test_helper'
 
 describe ImagesController do
   before do
@@ -14,7 +14,7 @@ describe ImagesController do
     end
 
     it "return a list of images" do
-      get :index, format: :json, project_id: @project
+      get_with_project @project, :index, format: :json
       must_respond_with :success
       must_render_template "api/images/index"
       images = assigns(:images)
@@ -28,7 +28,7 @@ describe ImagesController do
     end
 
     it "return an image" do
-      get :show, format: :json, project_id: @project, id: @image.id
+      get_with_project @project, :show, format: :json, id: @image.id
       must_respond_with :success
       must_render_template "api/images/show"
       image = assigns(:image)
@@ -38,7 +38,7 @@ describe ImagesController do
 
   describe "on POST to :create" do
     it "with an invalid image, will return the image with error validations " do
-      post :create, format: :json, project_id: @project, image: Image.new
+      post_with_project @project, :create, format: :json, image: Image.new
       must_respond_with :unprocessable_entity
       json_response["errors"]["image"].must_include "can't be blank"
     end
@@ -46,7 +46,7 @@ describe ImagesController do
     it "with a valid image will return an image" do
       image = Fabricate.attributes_for(:image, name: "logo", project: nil)
       image['image'] = Rack::Test::UploadedFile.new(Rails.root.join('test', 'support', 'Desktop.jpg').to_s, 'image/jpeg', true)
-      post :create, format: :json, project_id: @project, image: image
+      post_with_project @project, :create, format: :json, image: image
       must_respond_with :success
       json_response['name'].must_equal "logo"
     end

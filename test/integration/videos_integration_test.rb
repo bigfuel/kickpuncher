@@ -1,6 +1,6 @@
-require "minitest_helper"
+require "test_helper"
 
-describe "Admin Videos Integration Test" do
+describe "Videos Integration Test" do
   before do
     @project = Fabricate(:project, name: "bf_project_test")
   end
@@ -11,13 +11,13 @@ describe "Admin Videos Integration Test" do
     end
 
     it "shows correct url and video name :html" do
-      visit admin_project_videos_path(@project)
+      visit videos_path(@project)
       page.current_url.must_include('/bf_project_test/videos')
       page.must_have_content "bf_video_test"
     end
 
     it "shows correct url and video name :json" do
-      visit admin_project_videos_path(@project, format: :json)
+      visit videos_path(@project, format: :json)
       page.current_url.must_include('/bf_project_test/videos.json')
       page.must_have_content "bf_video_test"
     end
@@ -25,7 +25,7 @@ describe "Admin Videos Integration Test" do
 
   describe "on GET to :new" do
     before do
-      visit new_admin_project_video_path(@project)
+      visit new_video_path(@project)
     end
 
     it "shows the correct url" do
@@ -56,7 +56,7 @@ describe "Admin Videos Integration Test" do
   describe "on GET to :edit" do
     before do
       @video = Fabricate(:video, project: @project, name: "bf_video_test", youtube_id: "1v2i3d4e5o", description: "video test 1")
-      visit edit_admin_project_video_path(@project, @video)
+      visit edit_video_path(@project, @video)
     end
 
     it "shows the correct url" do
@@ -90,7 +90,7 @@ describe "Admin Videos Integration Test" do
     end
 
     it "shows correct url and project video info :html" do
-      visit admin_project_video_path(@project, @video)
+      visit video_path(@project, @video)
       path_id = @video.id.to_s
       page.current_url.must_include('/videos/' + path_id)
       page.must_have_content 'bf_video_test'
@@ -100,7 +100,7 @@ describe "Admin Videos Integration Test" do
     end
 
     it "shows correct url and project video info :json" do
-      visit admin_project_video_path(@project, @video, format: :json)
+      visit video_path(@project, @video, format: :json)
       path_id = @video.id.to_s
       page.current_url.must_include('/videos/' + path_id + '.json')
       page.must_have_content '"name":"bf_video_test"'
@@ -112,7 +112,7 @@ describe "Admin Videos Integration Test" do
 
   describe "on POST to :create" do
     it "sucessfully create a new video :html" do
-      visit new_admin_project_video_path(@project)
+      visit new_video_path(@project)
       page.fill_in "video_name", with: "bf_video_test"
       page.fill_in "video_youtube_id", with: "1v2i3d4e5o"
       page.fill_in "video_description", with: "video test 1"
@@ -130,7 +130,7 @@ describe "Admin Videos Integration Test" do
     end
 
     it "fails to create a new video" do
-      visit new_admin_project_video_path(@project)
+      visit new_video_path(@project)
       page.fill_in "video_name", with: "bf_video_test"
       page.click_on "Save"
       page.must_have_content "prohibited this project from being saved"
@@ -144,7 +144,7 @@ describe "Admin Videos Integration Test" do
   describe "on PUT to :update" do
     before do
       @video = Fabricate(:video, project: @project, name: "bf_video_test", youtube_id: "1v2i3d4e5o", description: "video test 1")
-      visit edit_admin_project_video_path(@project, @video)
+      visit edit_video_path(@project, @video)
     end
 
     it "sucessfully update a video :html" do
@@ -181,18 +181,18 @@ describe "Admin Videos Integration Test" do
     end
 
     it "sucessfully deletes a video :html" do
-      visit admin_project_videos_path(@project)
+      visit videos_path(@project)
       page.must_have_content "bf_video_test"
       page.click_on "Delete"
-      visit admin_project_videos_path(@project)
+      visit videos_path(@project)
       page.wont_have_content "bf_video_test"
     end
 
     it "sucessfully deletes a video :json" do
-      visit admin_project_videos_path(@project)
+      visit videos_path(@project)
       page.must_have_content "bf_video_test"
-      page.driver.delete admin_project_video_path(@project, @video, format: :json)
-      visit admin_project_videos_path(@project)
+      page.driver.delete video_path(@project, @video, format: :json)
+      visit videos_path(@project)
       page.wont_have_content "bf_video_test"
     end
   end
@@ -203,15 +203,15 @@ describe "Admin Videos Integration Test" do
     end
 
     it "sucessfully approves a project :html" do
-      visit admin_project_video_path(@project, @video)
+      visit video_path(@project, @video)
       page.must_have_content "pending"
-      page.driver.get approve_admin_project_video_path(@project, @video)
-      visit admin_project_video_path(@project, @video)
+      page.driver.get approve_video_path(@project, @video)
+      visit video_path(@project, @video)
       page.must_have_content "approved"
     end
 
     it "sucessfully approves a project :json" do
-      visit approve_admin_project_video_path(@project, @video, format: :json)
+      visit approve_video_path(@project, @video, format: :json)
       page.current_url.must_include('/approve.json')
       page.must_have_content '"status":"success"'
     end
@@ -223,15 +223,15 @@ describe "Admin Videos Integration Test" do
     end
 
     it "successfully denies a project :html" do
-      visit admin_project_video_path(@project, @video)
+      visit video_path(@project, @video)
       page.must_have_content "pending"
-      page.driver.get deny_admin_project_video_path(@project, @video)
-      visit admin_project_video_path(@project, @video)
+      page.driver.get deny_video_path(@project, @video)
+      visit video_path(@project, @video)
       page.must_have_content "denied"
     end
 
     it "successfully denies a project :json" do
-      visit deny_admin_project_video_path(@project, @video, format: :json)
+      visit deny_video_path(@project, @video, format: :json)
       page.current_url.must_include('/deny.json')
       page.must_have_content '"status":"success"'
     end

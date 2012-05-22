@@ -1,6 +1,6 @@
-require "minitest_helper"
+require 'test_helper'
 
-describe "Admin Polls Integration Test" do
+describe "Polls Integration Test" do
   before do
     @project = Fabricate(:project, name: "bf_project_test")
   end
@@ -11,13 +11,13 @@ describe "Admin Polls Integration Test" do
     end
 
     it "shows correct url and poll name :html" do
-      visit admin_project_polls_path(@project)
+      visit polls_path(@project)
       page.current_url.must_include('/bf_project_test/polls')
       page.must_have_content "bf_poll_test"
     end
 
     it "shows correct url and poll name :json" do
-      visit admin_project_polls_path(@project, format: :json)
+      visit polls_path(@project, format: :json)
       page.current_url.must_include('/bf_project_test/polls.json')
       page.must_have_content "bf_poll_test"
     end
@@ -25,7 +25,7 @@ describe "Admin Polls Integration Test" do
 
   describe "on GET to :new" do
     before do
-      visit new_admin_project_poll_path(@project)
+      visit new_poll_path(@project)
     end
 
     it "shows the correct url" do
@@ -59,7 +59,7 @@ describe "Admin Polls Integration Test" do
   describe "on GET to :edit" do
     before do
       @poll = Fabricate(:poll, project: @project, question: "bf_poll_test", start_date: "2003-11-11 04:00:00 AM", end_date: "2005-11-11 06:00:00 AM", choices:[{content: "first_choice"}, {content: "second_choice"}])
-      visit edit_admin_project_poll_path(@project, @poll)
+      visit edit_poll_path(@project, @poll)
     end
 
     it "shows the correct url" do
@@ -94,7 +94,7 @@ describe "Admin Polls Integration Test" do
     end
 
     it "shows correct url and project poll info :html" do
-      visit admin_project_poll_path(@project, @poll)
+      visit poll_path(@project, @poll)
       path_id = @poll.id.to_s
       page.current_url.must_include('/polls/' + path_id)
       page.must_have_content 'bf_poll_test'
@@ -106,7 +106,7 @@ describe "Admin Polls Integration Test" do
     end
 
     it "shows correct url and project poll info :json" do
-      visit admin_project_poll_path(@project, @poll, format: :json)
+      visit poll_path(@project, @poll, format: :json)
       path_id = @poll.id.to_s
       page.current_url.must_include('/polls/' + path_id + '.json')
       page.must_have_content '"question":"bf_poll_test"'
@@ -119,7 +119,7 @@ describe "Admin Polls Integration Test" do
 
   describe "on POST to :create" do
     it "sucessfully create a new poll :html" do
-      visit new_admin_project_poll_path(@project)
+      visit new_poll_path(@project)
       page.fill_in "poll_question", with: "bf_poll_test"
       page.fill_in "poll_choices_attributes_0_content", with: "first_choice"
       page.attach_file("poll_choices_attributes_0_image", File.join(::Rails.root, ('test/support/Desktop.jpg')))
@@ -143,7 +143,7 @@ describe "Admin Polls Integration Test" do
     end
 
     it "fails to create a new poll" do
-      visit new_admin_project_poll_path(@project)
+      visit new_poll_path(@project)
       page.fill_in "poll_start_date", with: "2003-11-11 04:00:00 AM"
       page.click_on "Save"
       page.must_have_content "prohibited this project from being saved"
@@ -157,7 +157,7 @@ describe "Admin Polls Integration Test" do
   describe "on PUT to :update" do
     before do
       @poll = Fabricate(:poll, project: @project, question: "bf_poll_test", start_date: "2003-11-11 04:00:00 AM", end_date: "2005-11-11 06:00:00 AM", choices:[{content: "first_choice"}, {content: "second_choice"}])
-      visit edit_admin_project_poll_path(@project, @poll)
+      visit edit_poll_path(@project, @poll)
     end
 
     it "sucessfully update a poll :html" do
@@ -199,18 +199,18 @@ describe "Admin Polls Integration Test" do
     end
 
     it "sucessfully deletes a poll :html" do
-      visit admin_project_polls_path(@project)
+      visit polls_path(@project)
       page.must_have_content "bf_poll_test"
       page.click_on "Delete"
-      visit admin_project_polls_path(@project)
+      visit polls_path(@project)
       page.wont_have_content "bf_poll_test"
     end
 
     it "sucessfully deletes a poll :json" do
-      visit admin_project_polls_path(@project)
+      visit polls_path(@project)
       page.must_have_content "bf_poll_test"
-      page.driver.delete admin_project_poll_path(@project, @poll, format: :json)
-      visit admin_project_polls_path(@project)
+      page.driver.delete poll_path(@project, @poll, format: :json)
+      visit polls_path(@project)
       page.wont_have_content "bf_poll_test"
     end
   end
@@ -221,15 +221,15 @@ describe "Admin Polls Integration Test" do
     end
 
     it "sucessfully activates a project :html" do
-      visit admin_project_poll_path(@project, @poll)
+      visit poll_path(@project, @poll)
       page.must_have_content "inactive"
-      page.driver.get activate_admin_project_poll_path(@project, @poll)
-      visit admin_project_poll_path(@project, @poll)
+      page.driver.get activate_poll_path(@project, @poll)
+      visit poll_path(@project, @poll)
       page.must_have_content "active"
     end
 
     it "sucessfully activates a project :json" do
-      visit activate_admin_project_poll_path(@project, @poll, format: :json)
+      visit activate_poll_path(@project, @poll, format: :json)
       page.current_url.must_include('/activate.json')
       page.must_have_content '"status":"success"'
     end
@@ -241,15 +241,15 @@ describe "Admin Polls Integration Test" do
     end
 
     it "successfully deactivates a project :html" do
-      visit admin_project_poll_path(@project, @poll)
+      visit poll_path(@project, @poll)
       page.must_have_content "active"
-      page.driver.get deactivate_admin_project_poll_path(@project, @poll)
-      visit admin_project_poll_path(@project, @poll)
+      page.driver.get deactivate_poll_path(@project, @poll)
+      visit poll_path(@project, @poll)
       page.must_have_content "inactive"
     end
 
     it "successfully deactivates a project :json" do
-      visit deactivate_admin_project_poll_path(@project, @poll, format: :json)
+      visit deactivate_poll_path(@project, @poll, format: :json)
       page.current_url.must_include('/deactivate.json')
       page.must_have_content '"status":"success"'
     end
@@ -262,7 +262,7 @@ describe "Admin Polls Integration Test" do
 
     it "successfully votes on a choice in poll" do
       skip "problem with vote in controller"
-      # visit admin_project_poll_path(@project, @poll)
+      # visit poll_path(@project, @poll)
       # page.choose "choice[id]"
       # page.click_on "Vote"
     end

@@ -1,4 +1,4 @@
-require "minitest_helper"
+require 'test_helper'
 
 describe Submission do
   it "should have validations" do

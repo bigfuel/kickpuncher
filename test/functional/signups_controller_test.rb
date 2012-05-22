@@ -1,4 +1,4 @@
-require 'minitest_helper'
+require 'test_helper'
 
 describe SignupsController do
   before do
@@ -13,7 +13,7 @@ describe SignupsController do
     it "return unprocessable_entity and a json object with validation errors when signup is invalid" do
       @signup[:email] = ""
       lambda do
-        post :create, format: :json, project_id: @project, signup: @signup
+        post_with_project @project, :create, format: :json, signup: @signup
       end.wont_change('Signup.count')
       must_respond_with :unprocessable_entity
       signup = assigns(:signup)
@@ -22,7 +22,7 @@ describe SignupsController do
 
     it "set state as complete if signup is flagged with opt_out" do
       @signup[:opt_out] = true
-      post :create, format: :json, project_id: @project, signup: @signup
+      post_with_project @project, :create, format: :json, signup: @signup
       must_respond_with :success
       signup = assigns(:signup)
       json_response['state'].must_equal "completed"
@@ -30,7 +30,7 @@ describe SignupsController do
 
     it "return json object if a signup is valid" do
       lambda do
-        post :create, format: :json, project_id: @project, signup: @signup
+        post_with_project @project,  :create, format: :json, signup: @signup
       end.must_change('Signup.count')
       must_respond_with :success
       signup = assigns(:signup)

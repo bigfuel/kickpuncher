@@ -1,6 +1,6 @@
-require "minitest_helper"
+require 'test_helper'
 
-describe "Admin Events Integration Test" do
+describe "Events Integration Test" do
   before do
     @project = Fabricate(:project, name: "bf_project_test")
   end
@@ -12,14 +12,14 @@ describe "Admin Events Integration Test" do
     end
 
     it "shows correct url and event name :html" do
-      visit admin_project_events_path(@project)
+      visit events_path(@project)
       page.current_url.must_include('/bf_project_test/events')
       page.must_have_content "bf_event_test"
       page.must_have_content "100 m street"
     end
 
     it "shows correct url and event name :json" do
-      visit admin_project_events_path(@project, format: :json)
+      visit events_path(@project, format: :json)
       page.current_url.must_include('/bf_project_test/events.json')
       page.must_have_content "bf_event_test"
       page.must_have_content "100 m street"
@@ -28,7 +28,7 @@ describe "Admin Events Integration Test" do
 
   describe "on GET to :new" do
     before do
-      visit new_admin_project_event_path(@project)
+      visit new_event_path(@project)
     end
 
     it "shows the correct url" do
@@ -80,7 +80,7 @@ describe "Admin Events Integration Test" do
     before do
       location = Fabricate.build(:location)
       @event = Fabricate(:event, location: location, project: @project, name: "bf_event_test", start_date: "03/11/11 04:00 am")
-      visit edit_admin_project_event_path(@project, @event)
+      visit edit_event_path(@project, @event)
     end
 
     it "shows the correct url" do
@@ -107,7 +107,7 @@ describe "Admin Events Integration Test" do
     end
 
     it "shows correct url and project event info :html" do
-      visit admin_project_event_path(@project, @event)
+      visit event_path(@project, @event)
       path_id = @event.id.to_s
       page.current_url.must_include('/events/' + path_id)
       page.must_have_content 'bf_event_test'
@@ -115,7 +115,7 @@ describe "Admin Events Integration Test" do
     end
 
     it "shows correct url and project event info :json" do
-      visit admin_project_event_path(@project, @event, format: :json)
+      visit event_path(@project, @event, format: :json)
       path_id = @event.id.to_s
       page.current_url.must_include('/events/' + path_id + '.json')
       page.must_have_content '"name":"bf_event_test"'
@@ -126,7 +126,7 @@ describe "Admin Events Integration Test" do
   describe "on POST to :create" do
     it "sucessfully create a new event :html" do
       skip "Save button is a link and requires javascript"
-      # visit new_admin_project_event_path(@project)
+      # visit new_event_path(@project)
       # page.fill_in "event_name", with: "bf_event_test"
       # page.fill_in "event_start_date", with: "11/11/03 04:00 am"
       # page.fill_in "event_location_attributes_name", with: "location123"
@@ -146,7 +146,7 @@ describe "Admin Events Integration Test" do
 
     it "fails to create a new event" do
       skip "Save button is a link and requires javascript"
-      # visit new_admin_project_event_path(@project)
+      # visit new_event_path(@project)
       # page.fill_in "Name", with: "bf_event_test"
       # page.click_on "Save"
       # page.must_have_content "prohibited this project from being saved"
@@ -161,7 +161,7 @@ describe "Admin Events Integration Test" do
     before do
       location = Fabricate.build(:location)
       @event = Fabricate(:event, location: location, project: @project, name: "bf_event_test", url: "http://newurl.com")
-      visit edit_admin_project_event_path(@project, @event)
+      visit edit_event_path(@project, @event)
     end
 
     it "sucessfully update a event :html" do
@@ -200,18 +200,18 @@ describe "Admin Events Integration Test" do
     end
 
     it "sucessfully deletes a event :html" do
-      visit admin_project_events_path(@project)
+      visit events_path(@project)
       page.must_have_content "bf_event_test"
       page.click_on "Delete"
-      visit admin_project_events_path(@project)
+      visit events_path(@project)
       page.wont_have_content "bf_event_test"
     end
 
     it "sucessfully deletes a event :json" do
-      visit admin_project_events_path(@project)
+      visit events_path(@project)
       page.must_have_content "bf_event_test"
-      page.driver.delete admin_project_event_path(@project, @event, format: :json)
-      visit admin_project_events_path(@project)
+      page.driver.delete event_path(@project, @event, format: :json)
+      visit events_path(@project)
       page.wont_have_content "bf_event_test"
     end
   end
@@ -223,15 +223,15 @@ describe "Admin Events Integration Test" do
     end
 
     it "sucessfully approves a project :html" do
-      visit admin_project_event_path(@project, @event)
+      visit event_path(@project, @event)
       page.must_have_content "pending"
-      page.driver.get approve_admin_project_event_path(@project, @event)
-      visit admin_project_event_path(@project, @event)
+      page.driver.get approve_event_path(@project, @event)
+      visit event_path(@project, @event)
       page.must_have_content "approved"
     end
 
     it "sucessfully approves a project :json" do
-      visit approve_admin_project_event_path(@project, @event, format: :json)
+      visit approve_event_path(@project, @event, format: :json)
       page.current_url.must_include('/approve.json')
       page.must_have_content '"status":"success"'
     end
@@ -244,15 +244,15 @@ describe "Admin Events Integration Test" do
     end
 
     it "successfully denies a project :html" do
-      visit admin_project_event_path(@project, @event)
+      visit event_path(@project, @event)
       page.must_have_content "pending"
-      page.driver.get deny_admin_project_event_path(@project, @event)
-      visit admin_project_event_path(@project, @event)
+      page.driver.get deny_event_path(@project, @event)
+      visit event_path(@project, @event)
       page.must_have_content "denied"
     end
 
     it "successfully denies a project :json" do
-      visit deny_admin_project_event_path(@project, @event, format: :json)
+      visit deny_event_path(@project, @event, format: :json)
       page.current_url.must_include('/deny.json')
       page.must_have_content '"status":"success"'
     end

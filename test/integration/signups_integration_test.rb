@@ -1,6 +1,6 @@
-require "minitest_helper"
+require "test_helper"
 
-describe "Admin Signups Integration Test" do
+describe "Signups Integration Test" do
   before do
     @project = Fabricate(:project, name: "bf_project_test")
   end
@@ -11,13 +11,13 @@ describe "Admin Signups Integration Test" do
     end
 
     it "shows correct url and signup name :html" do
-      visit admin_project_signups_path(@project)
+      visit signups_path(@project)
       page.current_url.must_include('/bf_project_test/signups')
       page.must_have_content "Daisy"
     end
 
     it "shows correct url and signup name :json" do
-      visit admin_project_signups_path(@project, format: :json)
+      visit signups_path(@project, format: :json)
       page.current_url.must_include('/bf_project_test/signups.json')
       page.must_have_content "Daisy"
     end
@@ -25,7 +25,7 @@ describe "Admin Signups Integration Test" do
 
   describe "on GET to :new" do
     before do
-      visit new_admin_project_signup_path(@project)
+      visit new_signup_path(@project)
     end
 
     it "shows the correct url" do
@@ -68,7 +68,7 @@ describe "Admin Signups Integration Test" do
   describe "on GET to :edit" do
     before do
       @signup = Fabricate(:signup, project: @project, first_name: "Daisy", last_name: "Lin", email: "signup@test.com")
-      visit edit_admin_project_signup_path(@project, @signup)
+      visit edit_signup_path(@project, @signup)
     end
 
     it "shows the correct url" do
@@ -98,7 +98,7 @@ describe "Admin Signups Integration Test" do
     end
 
     it "shows correct url and project signup info :html" do
-      visit admin_project_signup_path(@project, @signup)
+      visit signup_path(@project, @signup)
       path_id = @signup.id.to_s
       page.current_url.must_include('/signups/' + path_id)
       page.must_have_content 'Daisy'
@@ -107,7 +107,7 @@ describe "Admin Signups Integration Test" do
     end
 
     it "shows correct url and project signup info :json" do
-      visit admin_project_signup_path(@project, @signup, format: :json)
+      visit signup_path(@project, @signup, format: :json)
       path_id = @signup.id.to_s
       page.current_url.must_include('/signups/' + path_id + '.json')
       page.must_have_content '"first_name":"Daisy"'
@@ -118,7 +118,7 @@ describe "Admin Signups Integration Test" do
 
   describe "on POST to :create" do
     it "sucessfully create a new signup :html" do
-      visit new_admin_project_signup_path(@project)
+      visit new_signup_path(@project)
       page.fill_in "signup_first_name", with: "Daisy"
       page.fill_in "signup_last_name", with: "Lin"
       page.fill_in "signup_email", with: "signup@test.com"
@@ -134,7 +134,7 @@ describe "Admin Signups Integration Test" do
     end
 
     it "fails to create a new signup" do
-      visit new_admin_project_signup_path(@project)
+      visit new_signup_path(@project)
       page.fill_in "signup_first_name", with: "Daisy"
       page.click_on "Save"
       page.must_have_content "prohibited this project from being saved"
@@ -148,7 +148,7 @@ describe "Admin Signups Integration Test" do
   describe "on PUT to :update" do
     before do
       @signup = Fabricate(:signup, project: @project, first_name: "Daisy", last_name: "Lin", email: "signup@test.com")
-      visit edit_admin_project_signup_path(@project, @signup)
+      visit edit_signup_path(@project, @signup)
     end
 
     it "sucessfully update a signup :html" do
@@ -184,18 +184,18 @@ describe "Admin Signups Integration Test" do
     end
 
     it "sucessfully deletes a signup :html" do
-      visit admin_project_signups_path(@project)
+      visit signups_path(@project)
       page.must_have_content "Daisy"
       page.click_on "Delete"
-      visit admin_project_signups_path(@project)
+      visit signups_path(@project)
       page.wont_have_content "Daisy"
     end
 
     it "sucessfully deletes a signup :json" do
-      visit admin_project_signups_path(@project)
+      visit signups_path(@project)
       page.must_have_content "Daisy"
-      page.driver.delete admin_project_signup_path(@project, @signup, format: :json)
-      visit admin_project_signups_path(@project)
+      page.driver.delete signup_path(@project, @signup, format: :json)
+      visit signups_path(@project)
       page.wont_have_content "Daisy"
     end
   end

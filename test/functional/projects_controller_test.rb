@@ -1,10 +1,9 @@
-require 'minitest_helper'
+require 'test_helper'
 
 describe ProjectsController do
   describe "loaded project" do
     before do
       @project = Fabricate(:project, name: "fp_test")
-      Fabricate(:view_template, path: 'fp_test/index', project: @project)
     end
 
     it "return a routing error if the project is inactive" do
@@ -15,8 +14,8 @@ describe ProjectsController do
       @project.activate
       get :show, id: @project
       @controller_project = assigns(:project)
-      assert @controller_project
-      assert_equal 'fp_test', @controller_project.name
+      @controller_project.wont_be nil
+      @controller_project.name.must_equal 'fp_test'
     end
   end
 end

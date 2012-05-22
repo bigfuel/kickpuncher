@@ -1,14 +1,16 @@
-require "minitest_helper"
+require 'test_helper'
 
-describe Event do
-  it "should have validations" do
-    location = Fabricate.build(:location)
-    event = Fabricate.build(:event, location: location)
-    event.must have_valid(:name)
-    event.wont have_valid(:name).when(nil)
+class EventTest < ActiveSupport::TestCase
+  describe Event do
+    it "should have validations" do
+      location = Fabricate.build(:location)
+      event = Fabricate.build(:event, location: location)
+      event.must have_valid(:name)
+      event.wont have_valid(:name).when(nil)
 
-    event.must have_valid(:start_date)
-    event.wont have_valid(:start_date).when(nil)
+      event.must have_valid(:start_date)
+      event.wont have_valid(:start_date).when(nil)
+    end
   end
 
   describe "An event" do

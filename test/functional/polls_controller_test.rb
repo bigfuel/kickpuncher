@@ -1,4 +1,4 @@
-require 'minitest_helper'
+require 'test_helper'
 
 describe PollsController do
   before do
@@ -16,9 +16,9 @@ describe PollsController do
     end
 
     it "return a list of active polls" do
-      get :index, format: :json, project_id: @project
+      get_with_project @project, :index, format: :json
       must_respond_with :success
-      must_render_template "api/polls/index"
+      must_render_template "polls/index"
       polls = assigns(:polls)
       polls.must_equal @polls
     end
@@ -28,7 +28,7 @@ describe PollsController do
     before do
       @poll = Fabricate(:poll, project: @project)
       @poll.activate
-      get :show, format: :json, project_id: @project, id: @poll.id
+      get_with_project @project, :show, format: :json, id: @poll.id
     end
 
     it "returns a poll object" do
@@ -45,31 +45,31 @@ describe PollsController do
     end
 
     it "with a valid poll" do
-      put :vote, format: :json, project_id: @project, id: @poll.id, choice: { id: @poll.choices.first }
+      put_with_project @project, :vote, format: :json, id: @poll.id, choice: { id: @poll.choices.first }
       must_respond_with :success
     end
 
     it "with a blank choice should return a validation error" do
-      put :vote, format: :json, project_id: @project, id: @poll.id, choice: { id: "" }
+      put_with_project @project, :vote, format: :json, id: @poll.id, choice: { id: "" }
       must_respond_with :unprocessable_entity
     end
 
     it "with a nonexistant choice should return a validation error" do
-      put :vote, format: :json, project_id: @project, id: @poll.id, choice: { id: "400000000000000000000000" }
+      put_with_project @project, :vote, format: :json, id: @poll.id, choice: { id: "400000000000000000000000" }
       must_respond_with :unprocessable_entity
     end
   end
 
   describe "on POST to :create" do
     it "with an invalid poll, will return the poll with error validations " do
-      post :create, format: :json, project_id: @project, poll: Poll.new
+      post_with_project @project, :create, format: :json, poll: Poll.new
       must_respond_with :unprocessable_entity
       json_response["errors"]["question"].must_include "can't be blank"
     end
 
     it "with a valid poll will return an poll" do
-      poll = Fabricate.attributes_for(:poll, question: "Drink the fuel?", project: nil)
-      post :create, format: :json, project_id: @project, poll: poll
+      poll = Fabricate.attributes_for(:poll, question: "Drink the fuel?", project: @project)
+      post_with_project @project, :create, format: :json, poll: poll
       must_respond_with :success
       json_response['question'].must_equal "Drink the fuel?"
     end

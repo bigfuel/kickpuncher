@@ -1,6 +1,6 @@
-require "minitest_helper"
+require "test_helper"
 
-describe "Admin Images Integration Test" do
+describe "Images Integration Test" do
   before do
     @project = Fabricate(:project, name: "bf_project_test")
   end
@@ -11,13 +11,13 @@ describe "Admin Images Integration Test" do
     end
 
     it "shows correct url and image name :html" do
-      visit admin_project_images_path(@project)
+      visit images_path(@project)
       page.current_url.must_include('/bf_project_test/images')
       page.must_have_content "bf_image_test"
     end
 
     it "shows correct url and image name :json" do
-      visit admin_project_images_path(@project, format: :json)
+      visit images_path(@project, format: :json)
       page.current_url.must_include('/bf_project_test/images.json')
       page.must_have_content "bf_image_test"
     end
@@ -25,7 +25,7 @@ describe "Admin Images Integration Test" do
 
   describe "on GET to :new" do
     before do
-      visit new_admin_project_image_path(@project)
+      visit new_image_path(@project)
     end
 
     it "shows the correct url" do
@@ -52,7 +52,7 @@ describe "Admin Images Integration Test" do
   describe "on GET to :edit" do
     before do
       @image = Fabricate(:image, project: @project, name: "bf_image_test", description: "image test 1")
-      visit edit_admin_project_image_path(@project, @image)
+      visit edit_image_path(@project, @image)
     end
 
     it "shows the correct url" do
@@ -82,7 +82,7 @@ describe "Admin Images Integration Test" do
     end
 
     it "shows correct url and project image info :html" do
-      visit admin_project_image_path(@project, @image)
+      visit image_path(@project, @image)
       path_id = @image.id.to_s
       page.current_url.must_include('/images/' + path_id)
       page.must_have_content 'bf_image_test'
@@ -91,7 +91,7 @@ describe "Admin Images Integration Test" do
     end
 
     it "shows correct url and project image info :json" do
-      visit admin_project_image_path(@project, @image, format: :json)
+      visit image_path(@project, @image, format: :json)
       path_id = @image.id.to_s
       page.current_url.must_include('/images/' + path_id + '.json')
       page.must_have_content '"name":"bf_image_test"'
@@ -102,7 +102,7 @@ describe "Admin Images Integration Test" do
 
   describe "on POST to :create" do
     it "sucessfully create a new image :html" do
-      visit new_admin_project_image_path(@project)
+      visit new_image_path(@project)
       page.fill_in "image_name", with: "bf_image_test"
       page.fill_in "image_description", with: "image test 1"
       page.attach_file("image_image", File.join(::Rails.root, ('test/support/QR.png')))
@@ -118,7 +118,7 @@ describe "Admin Images Integration Test" do
     end
 
     it "fails to create a new image" do
-      visit new_admin_project_image_path(@project)
+      visit new_image_path(@project)
       page.fill_in "image_name", with: "bf_image_test"
       page.click_on "Save"
       page.must_have_content "prohibited this project from being saved"
@@ -132,7 +132,7 @@ describe "Admin Images Integration Test" do
   describe "on PUT to :update" do
     before do
       @image = Fabricate(:image, project: @project, name: "bf_image_test", description: "image test 1")
-      visit edit_admin_project_image_path(@project, @image)
+      visit edit_image_path(@project, @image)
     end
 
     it "sucessfully update an image :html" do
@@ -167,18 +167,18 @@ describe "Admin Images Integration Test" do
     end
 
     it "sucessfully deletes an image :html" do
-      visit admin_project_images_path(@project)
+      visit images_path(@project)
       page.must_have_content "bf_image_test"
       page.click_on "Delete"
-      visit admin_project_images_path(@project)
+      visit images_path(@project)
       page.wont_have_content "bf_image_test"
     end
 
     it "sucessfully deletes an image :json" do
-      visit admin_project_images_path(@project)
+      visit images_path(@project)
       page.must_have_content "bf_image_test"
-      page.driver.delete admin_project_image_path(@project, @image, format: :json)
-      visit admin_project_images_path(@project)
+      page.driver.delete image_path(@project, @image, format: :json)
+      visit images_path(@project)
       page.wont_have_content "bf_image_test"
     end
   end
@@ -189,15 +189,15 @@ describe "Admin Images Integration Test" do
     end
 
     it "sucessfully approves an image :html" do
-      visit admin_project_image_path(@project, @image)
+      visit image_path(@project, @image)
       page.must_have_content "pending"
-      page.driver.get approve_admin_project_image_path(@project, @image)
-      visit admin_project_image_path(@project, @image)
+      page.driver.get approve_image_path(@project, @image)
+      visit image_path(@project, @image)
       page.must_have_content "approved"
     end
 
     it "sucessfully approves an image :json" do
-      visit approve_admin_project_image_path(@project, @image, format: :json)
+      visit approve_image_path(@project, @image, format: :json)
       page.current_url.must_include('/approve.json')
       page.must_have_content '"status":"success"'
     end
@@ -209,15 +209,15 @@ describe "Admin Images Integration Test" do
     end
 
     it "successfully denies an image :html" do
-      visit admin_project_image_path(@project, @image)
+      visit image_path(@project, @image)
       page.must_have_content "pending"
-      page.driver.get deny_admin_project_image_path(@project, @image)
-      visit admin_project_image_path(@project, @image)
+      page.driver.get deny_image_path(@project, @image)
+      visit image_path(@project, @image)
       page.must_have_content "denied"
     end
 
     it "successfully denies an image :json" do
-      visit deny_admin_project_image_path(@project, @image, format: :json)
+      visit deny_image_path(@project, @image, format: :json)
       page.current_url.must_include('/deny.json')
       page.must_have_content '"status":"success"'
     end
