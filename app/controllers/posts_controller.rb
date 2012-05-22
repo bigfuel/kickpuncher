@@ -20,4 +20,37 @@ class PostsController < ApplicationController
 
     respond_with @post
   end
+
+  def create
+    @post = @project.posts.new(params[:post])
+    @post.save
+    respond_with @post
+  end
+
+  def update
+    @post = @project.posts.find(params[:id])
+    @post.update_attributes(params[:post])
+    respond_with @post
+  end
+
+  def destroy
+    @post = @project.posts.find(params[:id])
+    @post.destroy
+
+    respond_with @post
+  end
+
+  def approve
+    @post = @project.posts.find(params[:id])
+    @post.approve
+
+    render json: '{ "status":"success" }', status: :ok
+  end
+
+  def deny
+    @post = @project.posts.find(params[:id])
+    @post.deny
+
+    render json: '{ "status":"success" }', status: :ok
+  end
 end

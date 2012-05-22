@@ -1,22 +1,49 @@
 class ProjectsController < ApplicationController
   def index
-    @projects = Project.all
+    @projects = Project.order_by("name", "asc").page(params[:page])
     respond_with @projects
   end
 
   def show
-    @project = Project.find(params[:id])
-    # @signed_request = decode_signed_request(params[:signed_request], @project.facebook_app_id, @project.facebook_app_secret)
-    # @liked = @signed_request['page']['liked'] rescue false
-    # @liked = true if Rails.env.development?
-
-    if Rails.env.development? || stale?(etag: [@project, params[:signed_request]], last_modified: @project.updated_at.utc, public: true)
-      respond_with @project
-    end
+    @project = Project.find_by_name(params[:id])
+    respond_with @project
   end
 
   def deauthorize
     render nothing: true
+  end
+
+  def create
+    @project = Project.new(params[:project])
+    @project.save
+    respond_with @project
+  end
+
+  def update
+    @project = Project.find_by_name(params[:id])
+    @project.update_attributes(params[:project])
+    respond_with @project
+  end
+
+  def destroy
+    @project = Project.find_by_name(params[:id])
+    @project.destroy
+
+    respond_with @project
+  end
+
+  def activate
+    @project = Project.find_by_name(params[:id])
+    @project.activate
+
+    render json: '{ "status":"success" }', status: :ok
+  end
+
+  def deactivate
+    @project = Project.find_by_name(params[:id])
+    @project.deactivate
+
+    render json: '{ "status":"success" }', status: :ok
   end
 
   protected

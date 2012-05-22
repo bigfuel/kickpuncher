@@ -30,4 +30,18 @@ class SignupsController < ApplicationController
 
     respond_with @signup
   end
+
+  def update
+    @signup = @project.signups.find(params[:id])
+    @signup.update_attributes(params[:signup])
+
+    respond_with @signup
+  end
+
+  def destroy
+    @signup = @project.signups.find(params[:id])
+    @signup.destroy
+
+    respond_with @signup
+  end
 end

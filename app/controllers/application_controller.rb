@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::API
   include ActionController::MimeResponds
 
-  respond_to :json, :xml
+  respond_to :json
 
  protected
   def verify_auth_token

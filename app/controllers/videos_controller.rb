@@ -18,4 +18,39 @@ class VideosController < ApplicationController
 
     respond_with @video
   end
+
+  def create
+    @video = @project.videos.new(params[:video])
+    @video.save
+
+    respond_with @video
+  end
+
+  def update
+    @video = @project.videos.find(params[:id])
+    @video.update_attributes(params[:video])
+
+    respond_with @video
+  end
+
+  def destroy
+    @video = @project.videos.find(params[:id])
+    @video.destroy
+
+    respond_with @video
+  end
+
+  def approve
+    @video = @project.videos.find(params[:id])
+    @video.approve
+
+    render json: '{ "status":"success" }', status: :ok
+  end
+
+  def deny
+    @video = @project.videos.find(params[:id])
+    @video.deny
+
+    render json: '{ "status":"success" }', status: :ok
+  end
 end

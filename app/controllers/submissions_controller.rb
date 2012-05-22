@@ -22,12 +22,35 @@ class SubmissionsController < ApplicationController
   def create
     @submission = @project.submissions.new(params[:submission])
     @submission.save
+
     respond_with @submission
   end
 
   def update
     @submission = @project.submissions.find(params[:id])
     @submission.update_attributes(params[:submission])
+
     respond_with @submission
+  end
+
+  def destroy
+    @submission = @project.submissions.find(params[:id])
+    @submission.destroy
+
+    respond_with @submission
+  end
+
+  def approve
+    @submission = @project.submissions.find(params[:id])
+    @submission.approve
+
+    render json: '{ "status":"success" }', status: :ok
+  end
+
+  def deny
+    @submission = @project.submissions.find(params[:id])
+    @submission.deny
+
+    render json: '{ "status":"success" }', status: :ok
   end
 end

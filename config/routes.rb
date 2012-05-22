@@ -1,9 +1,9 @@
 require 'sidekiq/web'
 
 Kickpuncher::Application.routes.draw do
-  root to: 'projects#show'
+  root to: 'projects#index'
 
-  resources :project
+  resources :projects
   resources :signups
   resources :events
   resources :videos

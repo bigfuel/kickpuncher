@@ -25,4 +25,37 @@ class PollsController < ApplicationController
 
     respond_with @poll
   end
+
+  def create
+    @poll = @project.polls.new(params[:poll])
+    @poll.save
+    respond_with @poll
+  end
+
+  def update
+    @poll = @project.polls.find(params[:id])
+    @poll.update_attributes(params[:poll])
+    respond_with @poll
+  end
+
+  def destroy
+    @poll = @project.polls.find(params[:id])
+    @poll.destroy
+
+    respond_with @poll
+  end
+
+  def activate
+    @poll = @project.polls.find(params[:id])
+    @poll.activate
+
+    render json: '{ "status":"success" }', status: :ok
+  end
+
+  def deactivate
+    @poll = @project.polls.find(params[:id])
+    @poll.deactivate
+
+    render json: '{ "status":"success" }', status: :ok
+  end
 end

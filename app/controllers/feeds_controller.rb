@@ -17,4 +17,24 @@ class FeedsController < ApplicationController
 
     respond_with @feed
   end
+
+  def create
+    @feed = @project.feeds.new(params[:feed])
+    @feed.save
+    respond_with @feed
+  end
+
+  def update
+    @feed = @project.feeds.find_by_name(params[:id])
+    @feed.update_attributes(params[:feed])
+
+    respond_with @feed
+  end
+
+  def destroy
+    @feed = @project.feeds.find_by_name(params[:id])
+    @feed.destroy
+
+    respond_with @feed
+  end
 end

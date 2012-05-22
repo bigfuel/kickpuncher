@@ -18,4 +18,37 @@ class ImagesController < ApplicationController
 
     respond_with @image
   end
+
+  def create
+    @image = @project.images.new(params[:image])
+    @image.save
+    respond_with @image
+  end
+
+  def update
+    @image = @project.images.find(params[:id])
+    @image.update_attributes(params[:image])
+    respond_with @image
+  end
+
+  def destroy
+    @image = @project.images.find(params[:id])
+    @image.destroy
+
+    respond_with @image
+  end
+
+  def approve
+    @image = @project.images.find(params[:id])
+    @image.approve
+
+    render json: '{ "status":"success" }', status: :ok
+  end
+
+  def deny
+    @image = @project.images.find(params[:id])
+    @image.deny
+
+    render json: '{ "status":"success" }', status: :ok
+  end
 end
