@@ -3,6 +3,7 @@ require 'test_helper'
 describe EventsController do
   before do
     @project = load_project
+    add_permissions "events"
   end
 
   describe "on GET to :index" do
@@ -27,7 +28,7 @@ describe EventsController do
     end
 
     it "return a list of good approved events when type good=1 is specified" do
-      get_with_project @project, :index, format: :json, type: { good: 1 }.as_json
+      get_with_project @project, :index, format: :json, type: { good: 1 }
       must_respond_with :success
       must_render_template "events/index"
       events = assigns(:events)

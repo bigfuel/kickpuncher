@@ -3,6 +3,7 @@ require 'test_helper'
 describe SignupsController do
   before do
     @project = load_project
+    add_permissions "signups"
   end
 
   describe "on POST to :create" do

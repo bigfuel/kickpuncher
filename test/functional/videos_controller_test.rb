@@ -3,6 +3,7 @@ require 'test_helper'
 describe VideosController do
   before do
     @project = load_project
+    add_permissions "videos"
   end
 
   describe "on GET to :index" do
@@ -18,7 +19,7 @@ describe VideosController do
     it "return a list of approved videos" do
       get_with_project @project, :index, format: :json
       must_respond_with :success
-      must_render_template "api/videos/index"
+      must_render_template "videos/index"
       videos = assigns(:videos)
       (videos - @videos).must_be_empty
     end
@@ -33,7 +34,7 @@ describe VideosController do
     it "return a video" do
       get_with_project @project, :show, format: :json, id: @video.id
       must_respond_with :success
-      must_render_template "api/videos/show"
+      must_render_template "videos/show"
       video = assigns(:video)
       video.must_equal @video
     end

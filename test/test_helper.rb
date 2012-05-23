@@ -37,6 +37,12 @@ class ActionController::TestCase
     project
   end
 
+  def add_permissions(controller_name)
+    Permission.routes[controller_name].each do |action|
+      @project.permissions.create(controller_name: controller_name, action_name: action)
+    end
+  end
+
   def json_response
     ActiveSupport::JSON.decode @response.body
   end
@@ -68,7 +74,7 @@ class ActionController::TestCase
 
   private
   def merge_project_parameters(parameters, project)
-    parameters.reverse_merge(project_id: project.name, auth_token: project.authentication_token)
+    parameters.reverse_merge(project_id: project.name)
   end
 end
 

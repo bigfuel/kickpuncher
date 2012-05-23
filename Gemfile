@@ -64,7 +64,7 @@ end
 
 group :development, :test do
   gem 'awesome_print'
-  gem 'fabrication'
+  gem 'fabrication', git: 'git://github.com/paulelliott/fabrication.git'
   gem 'guard'
   gem 'rb-fsevent'
   gem 'ruby_gntp'

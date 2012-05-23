@@ -9,10 +9,6 @@ class ProjectsController < ApplicationController
     respond_with @project
   end
 
-  def deauthorize
-    render nothing: true
-  end
-
   def create
     @project = Project.new(params[:project])
     @project.save

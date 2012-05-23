@@ -5,29 +5,6 @@ class Project
   include Mongoid::Timestamps
   # include Mongoid::CarrierwaveFix
 
-  # Include default devise modules. Others available are:
-  # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :token_authenticatable, :trackable, :lockable
-
-  ## Trackable
-  field :sign_in_count,      type: Integer, default: 0
-  field :current_sign_in_at, type: Time
-  field :last_sign_in_at,    type: Time
-  field :current_sign_in_ip, type: String
-  field :last_sign_in_ip,    type: String
-
-  ## Encryptable
-  # field :password_salt, type: String
-
-  ## Lockable
-  field :failed_attempts, type: Integer, default: 0 # Only if lock strategy is :failed_attempts
-  field :unlock_token,    type: String # Only if unlock strategy is :email or :both
-  field :locked_at,       type: Time
-
-  ## Token authenticatable
-  field :authentication_token, type: String
-
-
   field :state, type: String, default: 'inactive'
   field :name, type: String
   field :description, type: String
@@ -38,8 +15,9 @@ class Project
 
   index :name, unique: true
 
-  attr_accessible :name, :description, :facebook_app_id, :facebook_app_secret, :google_analytics_tracking_code, :production_url, :authentication_token
+  attr_accessible :name, :description, :facebook_app_id, :facebook_app_secret, :google_analytics_tracking_code, :production_url
 
+  embeds_many :permissions, cascade_callbacks: true
   has_many :events, dependent: :destroy
   has_many :signups, dependent: :destroy
   has_many :polls, dependent: :destroy
@@ -51,7 +29,7 @@ class Project
   has_many :facebook_albums, dependent: :destroy
   has_many :facebook_events, dependent: :destroy
 
-  before_save :ensure_authentication_token
+  after_create :create_default_permissions
 
   scope :active, where(state: 'active')
   scope :inactive, where(state: 'inactive')
@@ -79,15 +57,15 @@ class Project
     self.name
   end
 
-  def verify_auth_token(auth_token)
-    auth_token == self.authentication_token
+  def has_permission?(controller_name, action_name)
+    !!permissions.where(controller_name: controller_name, action_name: action_name).limit(1).first
   end
 
   def self.find_by_name(name)
     where(name: name).limit(1).first
   end
 
-  def self.find_by_name_and_auth_token(name, auth_token)
-    where(name: name, authentication_token: auth_token).limit(1).first
+  protected
+  def create_default_permissions
   end
 end

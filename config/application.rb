@@ -72,8 +72,6 @@ module Kickpuncher
 
     config.generators do |g|
       g.orm :mongoid
-      g.test_framework :mini_test, spec: true, fixture: false
-      g.integration_tool :mini_test
       g.fixture_replacement :fabrication, dir: "test/fabricators"
     end
   end

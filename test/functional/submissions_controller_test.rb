@@ -3,6 +3,7 @@ require 'test_helper'
 describe SubmissionsController do
   before do
     @project = load_project
+    add_permissions "submissions"
   end
 
   describe "on GET to :show" do
@@ -14,7 +15,7 @@ describe SubmissionsController do
     it "return a submission" do
       get_with_project @project, :show, format: :json, id: @submission.id
       must_respond_with :success
-      must_render_template "api/submissions/show"
+      must_render_template "submissions/show"
       submission = assigns(:submission)
       submission.must_equal @submission
     end

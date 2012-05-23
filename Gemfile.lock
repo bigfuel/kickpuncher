@@ -1,4 +1,10 @@
 GIT
+  remote: git://github.com/paulelliott/fabrication.git
+  revision: fdc70465003952203c71331ba4b3dc355e1288ff
+  specs:
+    fabrication (1.4.0)
+
+GIT
   remote: git://github.com/spastorino/rails-api.git
   revision: ff406ad65272350eeb4a52b855846dc2de97e287
   specs:
@@ -72,7 +78,6 @@ GEM
     exceptional (2.0.32)
       rack
     excon (0.13.4)
-    fabrication (1.4.0)
     faraday (0.7.6)
       addressable (~> 2.2)
       multipart-post (~> 1.1)
@@ -315,7 +320,7 @@ DEPENDENCIES
   database_cleaner
   devise
   exceptional
-  fabrication
+  fabrication!
   feedzirra (= 0.0.24)
   ffaker
   fog

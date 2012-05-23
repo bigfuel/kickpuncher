@@ -1,5 +1,5 @@
 class PollsController < ApplicationController
-  before_filter :load_project, :check_for_project, :verify_auth_token
+  include ProjectContextConcern
 
   def index
     params[:sort_direction] ||= "asc"

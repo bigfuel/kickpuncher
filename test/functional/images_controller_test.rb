@@ -3,6 +3,7 @@ require 'test_helper'
 describe ImagesController do
   before do
     @project = load_project
+    add_permissions "images"
   end
 
   describe "on GET to :index" do
@@ -16,7 +17,7 @@ describe ImagesController do
     it "return a list of images" do
       get_with_project @project, :index, format: :json
       must_respond_with :success
-      must_render_template "api/images/index"
+      must_render_template "images/index"
       images = assigns(:images)
       (images - @images).must_be_empty
     end
@@ -30,7 +31,7 @@ describe ImagesController do
     it "return an image" do
       get_with_project @project, :show, format: :json, id: @image.id
       must_respond_with :success
-      must_render_template "api/images/show"
+      must_render_template "images/show"
       image = assigns(:image)
       image.must_equal @image
     end

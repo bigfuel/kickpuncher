@@ -3,6 +3,7 @@ require 'test_helper'
 describe PollsController do
   before do
     @project = load_project
+    add_permissions "polls"
   end
 
   describe "on GET to :index" do

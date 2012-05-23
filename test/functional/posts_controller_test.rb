@@ -3,6 +3,7 @@ require 'test_helper'
 describe PostsController do
   before do
     @project = load_project
+    add_permissions "posts"
   end
 
   describe "on GET to :index" do
